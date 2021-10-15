@@ -1,4 +1,4 @@
-package kz.aspan.rickandmorty.retrofit.model.character
+package kz.aspan.rickandmorty.domain.model.character
 
 
 data class Characters(

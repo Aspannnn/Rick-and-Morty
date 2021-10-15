@@ -1,11 +1,14 @@
-package kz.aspan.rickandmorty
+package kz.aspan.rickandmorty.presentation.character_detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import coil.load
+import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
-import kz.aspan.rickandmorty.retrofit.model.character.Character
+import kz.aspan.rickandmorty.domain.model.character.Character
+
+
 
 class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     private var _binding: FragmentCharacterDetailBinding? = null

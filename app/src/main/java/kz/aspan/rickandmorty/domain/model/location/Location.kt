@@ -1,4 +1,4 @@
-package kz.aspan.rickandmorty.retrofit.model.location
+package kz.aspan.rickandmorty.domain.model.location
 
 
 data class Location(

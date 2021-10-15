@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CharactersFragment">
+    tools:context=".presentation.characters.CharactersFragment">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/searchEt"

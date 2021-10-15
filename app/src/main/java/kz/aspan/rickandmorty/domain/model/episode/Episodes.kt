@@ -1,4 +1,4 @@
-package kz.aspan.rickandmorty.retrofit.model.episode
+package kz.aspan.rickandmorty.domain.model.episode
 
 
 data class Episodes(

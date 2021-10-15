@@ -1,7 +1,7 @@
-package kz.aspan.rickandmorty.retrofit.model.episode
+package kz.aspan.rickandmorty.domain.model.character
 
 
-data class EpisodeInfo(
+data class CharacterInfo(
     val count: Int,
     val next: String,
     val pages: Int,
