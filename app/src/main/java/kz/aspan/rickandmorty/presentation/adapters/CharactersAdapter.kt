@@ -1,4 +1,4 @@
-package kz.aspan.rickandmorty.adapter
+package kz.aspan.rickandmorty.presentation.adapters
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.databinding.CharacterCardViewBinding
-import kz.aspan.rickandmorty.retrofit.model.character.Character
+import kz.aspan.rickandmorty.domain.model.character.Character
 
 class CharactersAdapter :
     RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
