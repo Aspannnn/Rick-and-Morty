@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/ghost_white"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="56dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/characterImageInCv"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/rick" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/characterNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxEms="12"
+            android:textColor="@color/denim"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/characterImageInCv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Rick Sanchez" />
+
+        <View
+            android:id="@+id/isAliveView"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/is_alive_circle"
+            android:backgroundTint="@color/green_snake"
+            app:layout_constraintStart_toStartOf="@+id/characterNameTv"
+            app:layout_constraintTop_toBottomOf="@+id/characterNameTv" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/statusTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="Dead - Alien"
+            android:textColor="@color/denim"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/isAliveView"
+            app:layout_constraintTop_toBottomOf="@+id/characterNameTv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
