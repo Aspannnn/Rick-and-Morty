@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kz.aspan.rickandmorty.common.Constants.BASE_URL
 import kz.aspan.rickandmorty.data.remote.RickAndMortyApi
+import kz.aspan.rickandmorty.data.repository.RickAndMortyRepositoryImpl
+import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -41,5 +43,11 @@ object AppModule {
     @Provides
     fun provideRickAndMorty(retrofit: Retrofit): RickAndMortyApi {
         return retrofit.create(RickAndMortyApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRickAndMortyRepository(api: RickAndMortyApi): RickAndMortyRepository {
+        return RickAndMortyRepositoryImpl(api)
     }
 }

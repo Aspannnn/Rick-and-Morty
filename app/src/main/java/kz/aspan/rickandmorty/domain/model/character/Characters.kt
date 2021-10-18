@@ -1,7 +1,10 @@
 package kz.aspan.rickandmorty.domain.model.character
 
+import com.google.gson.annotations.SerializedName
+
 
 data class Characters(
     val info: CharacterInfo,
-    val results: List<Character>
+    @SerializedName("results")
+    val listOfCharacter: List<Character>
 )
