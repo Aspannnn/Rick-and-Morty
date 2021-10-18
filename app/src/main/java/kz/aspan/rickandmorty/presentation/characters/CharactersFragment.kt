@@ -5,12 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
+import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.presentation.adapters.CharactersAdapter
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
 import javax.inject.Inject
@@ -22,6 +24,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         get() = _binding!!
 
     private val viewModel: CharactersViewModel by viewModels()
+
 
     @Inject
     lateinit var charactersAdapter: CharactersAdapter
@@ -35,7 +38,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         setupRecyclerView()
         subscribeToObservers()
         charactersAdapter.setOnClickListener {
-
+            findNavController().navigateSafely(
+                R.id.action_charactersFragment_to_characterDetailFragment,
+                Bundle().apply {putSerializable("character", it)}
+            )
         }
     }
 
