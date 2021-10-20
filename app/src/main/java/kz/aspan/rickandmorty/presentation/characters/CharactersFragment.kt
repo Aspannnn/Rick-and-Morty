@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
-import kz.aspan.rickandmorty.presentation.adapters.CharactersAdapter
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
+import kz.aspan.rickandmorty.presentation.adapters.CharacterAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,20 +28,20 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
 
     @Inject
-    lateinit var charactersAdapter: CharactersAdapter
+    lateinit var charactersAdapter: CharacterAdapter
 
     private var updateCharactersJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         _binding = FragmentCharactersBinding.bind(view)
-        viewModel.getCharacters()
+        viewModel.getAllCharacters()
         setupRecyclerView()
         subscribeToObservers()
         charactersAdapter.setOnClickListener {
             findNavController().navigateSafely(
                 R.id.action_charactersFragment_to_characterDetailFragment,
-                Bundle().apply {putSerializable("character", it)}
+                Bundle().apply { putSerializable("character", it) }
             )
         }
     }
@@ -60,7 +61,9 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                 is CharactersViewModel.CharactersEvent.GetAllCharactersEvent -> {
                     updateCharactersJob?.cancel()
                     updateCharactersJob = lifecycleScope.launch {
-                        charactersAdapter.updateDataset(event.characters)
+                        event.characters.collectLatest {
+                            charactersAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+                        }
                     }
                 }
                 else -> Unit
