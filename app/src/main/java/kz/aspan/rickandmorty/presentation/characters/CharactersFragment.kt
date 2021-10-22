@@ -35,7 +35,6 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         _binding = FragmentCharactersBinding.bind(view)
-        viewModel.getAllCharacters()
         setupRecyclerView()
         subscribeToObservers()
         charactersAdapter.setOnClickListener {

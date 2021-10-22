@@ -37,8 +37,11 @@ class CharactersViewModel @Inject constructor(
     private val _charactersEvent = MutableSharedFlow<CharactersEvent>()
     val charactersEvent: SharedFlow<CharactersEvent> = _charactersEvent
 
+    init {
+        getAllCharacters()
+    }
 
-    fun getAllCharacters() {
+    private fun getAllCharacters() {
         viewModelScope.launch {
             try {
                 val result = repository.getAllCharacters().cachedIn(viewModelScope)
