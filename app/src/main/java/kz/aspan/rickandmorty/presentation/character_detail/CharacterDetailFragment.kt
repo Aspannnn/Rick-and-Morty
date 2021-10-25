@@ -24,7 +24,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         val character: Character = args.character
         binding.apply {
             characterIv.load(character.image)
-            characterNameTv.text = character.name
+            collapsingToolBar.title = character.name
         }
     }
 
