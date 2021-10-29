@@ -2,13 +2,16 @@ package kz.aspan.rickandmorty.presentation.characters
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -16,6 +19,7 @@ import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
 import kz.aspan.rickandmorty.presentation.adapters.CharacterAdapter
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,7 +34,6 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     @Inject
     lateinit var charactersAdapter: CharacterAdapter
 
-    private var updateCharactersJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
@@ -43,6 +46,13 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                 Bundle().apply { putSerializable("character", it) }
             )
         }
+
+        binding.searchEt.addTextChangedListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(300L)
+//                viewModel.filterCharacterByName(it.toString())
+            }
+        }
     }
 
 
@@ -52,17 +62,14 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
 
-    private fun subscribeToObservers() = lifecycleScope.launchWhenCreated {
+    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
         viewModel.characters.collect { event ->
             when (event) {
                 is CharactersViewModel.CharactersEvent.GetAllCharactersLoadingEvent -> {
                 }
                 is CharactersViewModel.CharactersEvent.GetAllCharactersEvent -> {
-                    updateCharactersJob?.cancel()
-                    updateCharactersJob = lifecycleScope.launch {
-                        event.characters.collectLatest {
-                            charactersAdapter.submitData(viewLifecycleOwner.lifecycle, it)
-                        }
+                    event.characters.collectLatest {
+                        charactersAdapter.submitData(viewLifecycleOwner.lifecycle, it)
                     }
                 }
                 else -> Unit

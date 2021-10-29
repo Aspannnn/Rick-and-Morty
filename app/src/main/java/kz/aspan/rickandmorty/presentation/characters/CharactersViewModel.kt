@@ -2,16 +2,16 @@ package kz.aspan.rickandmorty.presentation.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import androidx.paging.cachedIn
+import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kz.aspan.rickandmorty.common.Resource
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
+import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -39,6 +39,12 @@ class CharactersViewModel @Inject constructor(
 
     init {
         getAllCharacters()
+    }
+
+    fun filterCharacterByName(name: String) {
+        viewModelScope.launch {
+            TODO()
+        }
     }
 
     private fun getAllCharacters() {

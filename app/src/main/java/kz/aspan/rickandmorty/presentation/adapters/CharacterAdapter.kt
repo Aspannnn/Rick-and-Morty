@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import kz.aspan.rickandmorty.R
-import kz.aspan.rickandmorty.databinding.CharacterCardViewBinding
+import kz.aspan.rickandmorty.databinding.ItemCharacterBinding
 import kz.aspan.rickandmorty.domain.model.character.Character
 import javax.inject.Inject
 
@@ -16,7 +16,8 @@ class CharacterAdapter @Inject constructor() :
     PagingDataAdapter<Character, CharacterAdapter.CharacterViewHolder>(CharacterComparator) {
 
 
-    class CharacterViewHolder(val binding: CharacterCardViewBinding) :
+
+    class CharacterViewHolder(val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     object CharacterComparator : DiffUtil.ItemCallback<Character>() {
@@ -48,7 +49,7 @@ class CharacterAdapter @Inject constructor() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         return CharacterAdapter.CharacterViewHolder(
-            CharacterCardViewBinding.inflate(
+            ItemCharacterBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent, false
             )
