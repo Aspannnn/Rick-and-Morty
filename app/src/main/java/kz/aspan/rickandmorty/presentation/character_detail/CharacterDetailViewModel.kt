@@ -12,8 +12,6 @@ import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.common.Resource
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
-import okhttp3.internal.wait
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +36,7 @@ class CharacterDetailViewModel @Inject constructor(
     fun getEpisodes(urls: List<String>) {
         _episodes.value = DetailEvent.GetEpisodeLoading
         viewModelScope.launch {
-            val ids = getEpisodeId(urls)
+            val ids = getIds(urls)
 
             val result = if (urls.size > 1) {
                 repository.getMultipleEpisodes(ids)
@@ -55,7 +53,7 @@ class CharacterDetailViewModel @Inject constructor(
     }
 
 
-    private fun getEpisodeId(urls: List<String>): String {
+    private fun getIds(urls: List<String>): String {
         return buildString {
             for (i in urls.indices) {
                 val uri = Uri.parse(urls[i])

@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".presentation.episode.EpisodeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/episodeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="season 01 episode 01" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Pilot" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="air date" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/airDateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="December 2, 2013" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Characters" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCharacters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/item_character" />
 
-</FrameLayout>
+</LinearLayout>

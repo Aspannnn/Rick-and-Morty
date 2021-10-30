@@ -7,10 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -18,8 +16,7 @@ import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
-import kz.aspan.rickandmorty.presentation.adapters.CharacterAdapter
-import timber.log.Timber
+import kz.aspan.rickandmorty.presentation.adapters.CharacterPagingAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,7 +29,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
 
     @Inject
-    lateinit var charactersAdapter: CharacterAdapter
+    lateinit var charactersAdapter: CharacterPagingAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -10,8 +10,8 @@ import kz.aspan.rickandmorty.databinding.ItemEpisodeBinding
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import javax.inject.Inject
 
-class CharacterDetailAdapter @Inject constructor() :
-    RecyclerView.Adapter<CharacterDetailAdapter.CharacterDetailViewHolder>() {
+class EpisodeAdapter @Inject constructor() :
+    RecyclerView.Adapter<EpisodeAdapter.CharacterDetailViewHolder>() {
 
     class CharacterDetailViewHolder(val binding: ItemEpisodeBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -36,7 +36,7 @@ class CharacterDetailAdapter @Inject constructor() :
         })
         withContext(Dispatchers.Main) {
             episodes = newDataset
-            diff.dispatchUpdatesTo(this@CharacterDetailAdapter)
+            diff.dispatchUpdatesTo(this@EpisodeAdapter)
         }
     }
 
