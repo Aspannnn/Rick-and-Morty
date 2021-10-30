@@ -20,12 +20,11 @@
             app:expandedTitleGravity="center_horizontal|bottom"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="@string/app_name">
-            <!--            app:collapsedTitleGravity="center"-->
 
             <ImageView
                 android:id="@+id/characterIv"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="450dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/rick"
                 app:layout_collapseMode="parallax" />
@@ -126,39 +125,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/firstSeenInTv"
                 tools:listitem="@layout/item_episode" />
-
         </LinearLayout>
-
-
     </androidx.core.widget.NestedScrollView>
-
-
-    <!--    <com.google.android.material.card.MaterialCardView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="380dp"-->
-    <!--        android:layout_margin="16dp"-->
-    <!--        android:elevation="56dp"-->
-    <!--        app:cardCornerRadius="10dp">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/characterIv"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:scaleType="fitXY"-->
-    <!--            android:src="@drawable/rick" />-->
-    <!--    </com.google.android.material.card.MaterialCardView>-->
-
-    <!--    <com.google.android.material.textview.MaterialTextView-->
-    <!--        android:id="@+id/characterNameTv"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:ellipsize="end"-->
-    <!--        android:lines="1"-->
-    <!--        android:maxEms="12"-->
-    <!--        android:textColor="@color/denim"-->
-    <!--        android:textSize="25sp"-->
-    <!--        android:textStyle="bold"-->
-    tools:text="Rick Sanchez" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

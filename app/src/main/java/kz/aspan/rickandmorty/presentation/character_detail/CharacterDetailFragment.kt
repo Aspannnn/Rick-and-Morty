@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kz.aspan.rickandmorty.R
+import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.presentation.adapters.CharacterDetailAdapter
@@ -31,11 +33,16 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     lateinit var episodeAdapter: CharacterDetailAdapter
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getEpisodes(args.character.episode)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCharacterDetailBinding.bind(view)
         val character: Character = args.character
-        viewModel.getEpisodes(character.episode)
         subscribeToObservers()
         setupRecyclerView()
         binding.apply {
@@ -48,8 +55,11 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
             lastLocationTv.text = character.location.name
         }
 
-        episodeAdapter.setOnEpisodeClickListener {
-            println(it.name)
+        episodeAdapter.setOnEpisodeClickListener { episode ->
+            findNavController().navigateSafely(
+                R.id.action_characterDetailFragment_to_episodeFragment,
+                Bundle().apply { putSerializable("episode", episode) }
+            )
         }
     }
 

@@ -1,5 +1,6 @@
 package kz.aspan.rickandmorty.data.remote
 
+import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import retrofit2.Response
@@ -17,4 +18,10 @@ interface RickAndMortyApi {
 
     @GET("episode/{id}")
     suspend fun getEpisode(@Path("id") id: String): Response<Episode>
+
+    @GET("character/{id")
+    suspend fun getMultipleCharacters(@Path("id") ids: String): Response<List<Character>>
+
+    @GET("character/{id}")
+    suspend fun getCharacterById(@Path("id") ids: String): Response<Character>
 }

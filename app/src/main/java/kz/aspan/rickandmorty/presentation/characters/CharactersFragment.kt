@@ -36,14 +36,14 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCharactersBinding.bind(view)
         setupRecyclerView()
         subscribeToObservers()
-        charactersAdapter.setOnClickListener {
+        charactersAdapter.setOnClickListener { character ->
             findNavController().navigateSafely(
                 R.id.action_charactersFragment_to_characterDetailFragment,
-                Bundle().apply { putSerializable("character", it) }
+                Bundle().apply { putSerializable("character", character) }
             )
         }
 

@@ -57,4 +57,36 @@ class RickAndMortyRepositoryImpl @Inject constructor(
             Resource.Error("Unknown Error")
         }
     }
+
+    override suspend fun getMultipleCharacters(ids: String): Resource<List<Character>> {
+        val response = try {
+            api.getMultipleCharacters(ids)
+        } catch (e: HttpException) {
+            return Resource.Error("Something went wrong. Please try again later.")
+        } catch (e: IOException) {
+            return Resource.Error("Couldn\'t reach server. Check your internet connection")
+        }
+
+        return if (response.isSuccessful && response.body() != null) {
+            Resource.Success(response.body()!!)
+        } else {
+            Resource.Error("Unknown Error")
+        }
+    }
+
+    override suspend fun getCharacterById(id: String): Resource<List<Character>> {
+        val response = try {
+            api.getCharacterById(id)
+        } catch (e: HttpException) {
+            return Resource.Error("Something went wrong. Please try again later.")
+        } catch (e: IOException) {
+            return Resource.Error("Couldn\'t reach server. Check your internet connection")
+        }
+
+        return if (response.isSuccessful && response.body() != null) {
+            Resource.Success(listOf(response.body()!!))
+        } else {
+            Resource.Error("Unknown Error")
+        }
+    }
 }

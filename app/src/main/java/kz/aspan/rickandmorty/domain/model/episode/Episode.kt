@@ -2,6 +2,7 @@ package kz.aspan.rickandmorty.domain.model.episode
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Episode(
     @SerializedName("air_date")
@@ -12,4 +13,4 @@ data class Episode(
     val id: Int,
     val name: String,
     val url: String
-)
+):Serializable

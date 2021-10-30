@@ -13,6 +13,9 @@
         <argument
             android:name="character"
             app:argType="kz.aspan.rickandmorty.domain.model.character.Character" />
+        <action
+            android:id="@+id/action_characterDetailFragment_to_episodeFragment"
+            app:destination="@id/episodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/charactersFragment"
@@ -22,5 +25,17 @@
         <action
             android:id="@+id/action_charactersFragment_to_characterDetailFragment"
             app:destination="@id/characterDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodeFragment"
+        android:name="kz.aspan.rickandmorty.presentation.episode.EpisodeFragment"
+        android:label="fragment_episode"
+        tools:layout="@layout/fragment_episode">
+        <action
+            android:id="@+id/action_episodeFragment_to_characterDetailFragment"
+            app:destination="@id/characterDetailFragment" />
+        <argument
+            android:name="episode"
+            app:argType="kz.aspan.rickandmorty.domain.model.episode.Episode" />
     </fragment>
 </navigation>
