@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentEpisodeBinding
@@ -29,11 +30,6 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
 
     @Inject
     lateinit var characterAdapter: CharacterAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getCharacters(args.episode.characters)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,8 +54,8 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     }
 
 
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        viewModel.character.collect() { event ->
+    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.character.collectLatest{ event ->
             when (event) {
                 is EpisodeViewModel.EpisodeEvent.Loading -> {
                 }

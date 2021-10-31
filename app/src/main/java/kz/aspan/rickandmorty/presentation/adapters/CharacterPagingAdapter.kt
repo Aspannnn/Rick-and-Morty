@@ -16,7 +16,6 @@ class CharacterPagingAdapter @Inject constructor() :
     PagingDataAdapter<Character, CharacterPagingAdapter.CharacterViewHolder>(CharacterComparator) {
 
 
-
     class CharacterViewHolder(val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -48,7 +47,7 @@ class CharacterPagingAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        return CharacterPagingAdapter.CharacterViewHolder(
+        return CharacterViewHolder(
             ItemCharacterBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent, false
@@ -65,12 +64,18 @@ class CharacterPagingAdapter @Inject constructor() :
 
     private fun getColor(
         status: String,
-        holder: CharacterPagingAdapter.CharacterViewHolder
+        holder: CharacterViewHolder
     ): ColorStateList {
-        return if (status == "Alive") {
-            holder.itemView.context.getColorStateList(R.color.green_snake)
-        } else {
-            holder.itemView.context.getColorStateList(R.color.jasper)
+        return when (status) {
+            "Alive" -> {
+                holder.itemView.context.getColorStateList(R.color.green_snake)
+            }
+            "Dead" -> {
+                holder.itemView.context.getColorStateList(R.color.jasper)
+            }
+            else -> {
+                holder.itemView.context.getColorStateList(R.color.gray)
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
@@ -32,13 +32,6 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     @Inject
     lateinit var episodeAdapter: EpisodeAdapter
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getEpisodes(args.character.episode)
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCharacterDetailBinding.bind(view)
@@ -48,7 +41,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         binding.apply {
             characterIv.load(character.image)
             collapsingToolBar.title = character.name
-            isAliveView.backgroundTintList = getColor(character.status)
+            isAliveView.backgroundTintList = getColor(character.status ?: "unknown")
             statusTv.text = character.status
             speciesTv.text = character.species
             typeTv.text = character.type
@@ -70,8 +63,8 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     }
 
 
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        viewModel.episodes.collect { event ->
+    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.episodes.collectLatest { event ->
             when (event) {
                 is CharacterDetailViewModel.DetailEvent.GetEpisodeLoading -> {
                 }
@@ -89,10 +82,16 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     private fun getColor(
         status: String,
     ): ColorStateList {
-        return if (status == "Alive") {
-            requireActivity().getColorStateList(R.color.green_snake)
-        } else {
-            requireActivity().getColorStateList(R.color.jasper)
+        return when (status) {
+            "Alive" -> {
+                requireActivity().getColorStateList(R.color.green_snake)
+            }
+            "Dead" -> {
+                requireActivity().getColorStateList(R.color.jasper)
+            }
+            else -> {
+                requireActivity().getColorStateList(R.color.gray)
+            }
         }
     }
 

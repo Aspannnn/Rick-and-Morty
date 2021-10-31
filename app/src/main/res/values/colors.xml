@@ -13,4 +13,5 @@
     <color name="ghost_white">#F8F9FF</color>
     <color name="green_snake">#55CC44</color>
     <color name="jasper">#D63D2E</color>
+    <color name="gray">#808080</color>
 </resources>

@@ -1,5 +1,6 @@
 package kz.aspan.rickandmorty.presentation.characters
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
@@ -17,8 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
-    private val repository: RickAndMortyRepository
+    private val repository: RickAndMortyRepository,
 ) : ViewModel() {
+
 
     sealed class CharactersEvent {
         data class GetAllCharactersEvent(val characters: Flow<PagingData<Character>>) :

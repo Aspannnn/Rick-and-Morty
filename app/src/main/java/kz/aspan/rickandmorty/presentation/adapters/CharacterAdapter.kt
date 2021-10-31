@@ -85,10 +85,16 @@ class CharacterAdapter @Inject constructor() :
         status: String,
         holder: CharacterViewHolder
     ): ColorStateList {
-        return if (status == "Alive") {
-            holder.itemView.context.getColorStateList(R.color.green_snake)
-        } else {
-            holder.itemView.context.getColorStateList(R.color.jasper)
+        return when (status) {
+            "Alive" -> {
+                holder.itemView.context.getColorStateList(R.color.green_snake)
+            }
+            "Dead" -> {
+                holder.itemView.context.getColorStateList(R.color.jasper)
+            }
+            else -> {
+                holder.itemView.context.getColorStateList(R.color.gray)
+            }
         }
     }
 }

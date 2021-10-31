@@ -1,6 +1,7 @@
 package kz.aspan.rickandmorty.presentation.character_detail
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,14 +11,17 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.common.Resource
+import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class CharacterDetailViewModel @Inject constructor(
-    private val repository: RickAndMortyRepository
+    private val repository: RickAndMortyRepository,
+    args: SavedStateHandle
 ) : ViewModel() {
+
 
     sealed class DetailEvent() {
         data class GetEpisodes(val episodes: List<Episode>) : DetailEvent()
@@ -32,8 +36,13 @@ class CharacterDetailViewModel @Inject constructor(
     private val _episodes = MutableStateFlow<DetailEvent>(DetailEvent.GetEpisodeEmpty)
     val episodes: StateFlow<DetailEvent> = _episodes
 
+    init {
+        args.get<Character>("character")?.let {
+            getEpisodes(it.episode)
+        }
+    }
 
-    fun getEpisodes(urls: List<String>) {
+    private fun getEpisodes(urls: List<String>) {
         _episodes.value = DetailEvent.GetEpisodeLoading
         viewModelScope.launch {
             val ids = getIds(urls)

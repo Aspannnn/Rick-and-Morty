@@ -40,7 +40,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         charactersAdapter.setOnClickListener { character ->
             findNavController().navigateSafely(
                 R.id.action_charactersFragment_to_characterDetailFragment,
-                Bundle().apply { putSerializable("character", character) }
+                Bundle().apply { putSerializable("character", character)
+                }
             )
         }
 
@@ -59,8 +60,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
 
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-        viewModel.characters.collect { event ->
+    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.characters.collectLatest { event ->
             when (event) {
                 is CharactersViewModel.CharactersEvent.GetAllCharactersLoadingEvent -> {
                 }
