@@ -8,15 +8,18 @@ import kz.aspan.rickandmorty.domain.model.character.Character
 import retrofit2.HttpException
 import java.io.IOException
 
-class CharactersPagingDataSource(
-    private val api: RickAndMortyApi
+class CharacterFilterPagingDataSource(
+    private val api: RickAndMortyApi,
+    private val name: String,
+    private val status: String
 ) :
     PagingSource<Int, Character>() {
+
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         val pageNumber = params.key ?: 1
         return try {
-            val response = api.getAllCharacters(pageNumber)
+            val response = api.getCharacterByName(pageNumber, name, status)
             val pagedResponse = response.body()
             val data = pagedResponse?.listOfCharacter
 

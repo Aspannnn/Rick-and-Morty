@@ -1,4 +1,4 @@
-package kz.aspan.rickandmorty.presentation.adapters
+package kz.aspan.rickandmorty.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

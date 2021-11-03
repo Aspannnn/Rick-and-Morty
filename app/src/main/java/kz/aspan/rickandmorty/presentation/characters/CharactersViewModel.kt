@@ -33,19 +33,27 @@ class CharactersViewModel @Inject constructor(
 
     private val _characters =
         MutableStateFlow<CharactersEvent>(CharactersEvent.GetAllCharactersEmptyEvent)
-
     val characters: StateFlow<CharactersEvent> = _characters
 
     private val _charactersEvent = MutableSharedFlow<CharactersEvent>()
     val charactersEvent: SharedFlow<CharactersEvent> = _charactersEvent
 
+    private val _filteredCharacters =
+        MutableStateFlow<CharactersEvent>(CharactersEvent.GetAllCharactersEmptyEvent)
+    val filteredCharacters: StateFlow<CharactersEvent> = _filteredCharacters
+
     init {
         getAllCharacters()
     }
 
-    fun filterCharacterByName(name: String) {
+    fun filterCharacterByName(name: String, status: String = "") {
         viewModelScope.launch {
-            TODO()
+            try {
+                val result = repository.getCharacterByName(name, status).cachedIn(viewModelScope)
+                _filteredCharacters.value = CharactersEvent.GetAllCharactersEvent(result)
+            } catch (e: Exception) {
+                _charactersEvent.emit(CharactersEvent.GetAllCharactersErrorEvent(e.localizedMessage))
+            }
         }
     }
 

@@ -16,7 +16,7 @@ import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
 import kz.aspan.rickandmorty.domain.model.character.Character
-import kz.aspan.rickandmorty.presentation.adapters.EpisodeAdapter
+import kz.aspan.rickandmorty.adapters.EpisodeAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,7 +41,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         binding.apply {
             characterIv.load(character.image)
             collapsingToolBar.title = character.name
-            isAliveView.backgroundTintList = getColor(character.status ?: "unknown")
+            isAliveView.backgroundTintList = getColor(character.status)
             statusTv.text = character.status
             speciesTv.text = character.species
             typeTv.text = character.type

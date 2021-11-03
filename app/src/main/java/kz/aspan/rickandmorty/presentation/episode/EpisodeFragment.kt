@@ -9,13 +9,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentEpisodeBinding
 import kz.aspan.rickandmorty.domain.model.episode.Episode
-import kz.aspan.rickandmorty.presentation.adapters.CharacterAdapter
+import kz.aspan.rickandmorty.adapters.CharacterAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint

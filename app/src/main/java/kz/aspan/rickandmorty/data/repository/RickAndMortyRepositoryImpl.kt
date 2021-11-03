@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kz.aspan.rickandmorty.common.Resource
+import kz.aspan.rickandmorty.data.paging.CharacterFilterPagingDataSource
 import kz.aspan.rickandmorty.data.paging.CharactersPagingDataSource
 import kz.aspan.rickandmorty.data.remote.RickAndMortyApi
 import kz.aspan.rickandmorty.domain.model.character.Character
@@ -25,6 +26,13 @@ class RickAndMortyRepositoryImpl @Inject constructor(
         config = PagingConfig(pageSize = 20, prefetchDistance = 2),
         pagingSourceFactory = { CharactersPagingDataSource(api) }
     ).flow
+
+
+    override fun getCharacterByName(name: String, status: String): Flow<PagingData<Character>> =
+        Pager(
+            config = PagingConfig(pageSize = 20, prefetchDistance = 2),
+            pagingSourceFactory = { CharacterFilterPagingDataSource(api, name, status) }
+        ).flow
 
     override suspend fun getMultipleEpisodes(ids: String): Resource<List<Episode>> {
         val response = try {
@@ -89,4 +97,6 @@ class RickAndMortyRepositoryImpl @Inject constructor(
             Resource.Error("Unknown Error")
         }
     }
+
+
 }

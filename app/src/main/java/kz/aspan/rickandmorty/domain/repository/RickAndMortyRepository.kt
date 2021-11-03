@@ -8,6 +8,7 @@ import kz.aspan.rickandmorty.domain.model.episode.Episode
 
 interface RickAndMortyRepository {
     fun getAllCharacters(): Flow<PagingData<Character>>
+    fun getCharacterByName(name: String, status: String): Flow<PagingData<Character>>
     suspend fun getMultipleEpisodes(ids: String): Resource<List<Episode>>
     suspend fun getEpisode(id: String): Resource<List<Episode>>
     suspend fun getMultipleCharacters(ids: String): Resource<List<Character>>
