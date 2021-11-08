@@ -79,7 +79,6 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
                 }
                 is CharacterDetailViewModel.DetailEvent.GetEpisodes -> {
                     episodeAdapter.updateDataset(event.episodes)
-                    binding.firstSeenInTv.text = event.episodes[0].name
                 }
                 else -> Unit
             }

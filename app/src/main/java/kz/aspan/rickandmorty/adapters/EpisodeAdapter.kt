@@ -60,7 +60,8 @@ class EpisodeAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: CharacterDetailViewHolder, position: Int) {
         val episode = episodes[position]
         holder.binding.apply {
-            episodeTv.text = episode.episode
+            episodeTv.text = episode.episode.replace("S","Season:").replace("E"," Episode:")
+
             episodeTitleTv.text = episode.name
 
             root.setOnClickListener {
@@ -75,6 +76,13 @@ class EpisodeAdapter @Inject constructor() :
 
     fun setOnEpisodeClickListener(listener: (Episode) -> Unit) {
         onEpisodeClickListener = listener
+    }
+
+    private fun completeEpisode(str: String): String {
+        str.replace("S", "Season ")
+        str.replace("E", " Episode ")
+
+        return str
     }
 
 
