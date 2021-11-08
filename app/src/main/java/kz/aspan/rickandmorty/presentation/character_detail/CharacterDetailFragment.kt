@@ -46,6 +46,15 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
             speciesTv.text = character.species
             typeTv.text = character.type
             lastLocationTv.text = character.location.name
+
+            lastLocationTv.setOnClickListener {
+                findNavController().navigateSafely(
+                    R.id.action_characterDetailFragment_to_locationDetailFragment,
+                    Bundle().apply {
+                        putString("locationUrl", character.location.url)
+                    }
+                )
+            }
         }
 
         episodeAdapter.setOnEpisodeClickListener { episode ->

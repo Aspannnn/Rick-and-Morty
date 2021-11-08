@@ -3,6 +3,7 @@ package kz.aspan.rickandmorty.data.remote
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
+import kz.aspan.rickandmorty.domain.model.location.Location
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -31,4 +32,8 @@ interface RickAndMortyApi {
         @Query("name") name: String,
         @Query("status") status: String
     ): Response<Characters>
+
+
+    @GET("location/{id}")
+    suspend fun getLocationById(@Path("id") id: String):Response<Location>
 }

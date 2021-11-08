@@ -43,11 +43,8 @@ class EpisodeViewModel @Inject constructor(
     }
 
     private fun getCharacters(urls: List<String>) {
-
         viewModelScope.launch {
             val ids = getIds(urls)
-            println(ids)
-
             val result = if (urls.size > 1) {
                 repository.getMultipleCharacters(ids)
             } else {
@@ -57,7 +54,7 @@ class EpisodeViewModel @Inject constructor(
             if (result is Resource.Success) {
                 _character.value = EpisodeEvent.GetCharacter(result.data ?: return@launch)
             } else {
-                _character.value = EpisodeEvent.GetCharacterError(result.message ?: return@launch)
+                _episodeEvent.emit(EpisodeEvent.GetCharacterError(result.message ?: return@launch))
             }
         }
     }

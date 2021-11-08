@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kz.aspan.rickandmorty.common.Resource
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.episode.Episode
+import kz.aspan.rickandmorty.domain.model.location.Location
 
 interface RickAndMortyRepository {
     fun getAllCharacters(): Flow<PagingData<Character>>
@@ -13,4 +14,5 @@ interface RickAndMortyRepository {
     suspend fun getEpisode(id: String): Resource<List<Episode>>
     suspend fun getMultipleCharacters(ids: String): Resource<List<Character>>
     suspend fun getCharacterById(id: String): Resource<List<Character>>
+    suspend fun getLocationById(id: String): Resource<Location>
 }

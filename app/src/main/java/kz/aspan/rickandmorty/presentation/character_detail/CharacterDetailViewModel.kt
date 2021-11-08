@@ -22,7 +22,6 @@ class CharacterDetailViewModel @Inject constructor(
     args: SavedStateHandle
 ) : ViewModel() {
 
-
     sealed class DetailEvent() {
         data class GetEpisodes(val episodes: List<Episode>) : DetailEvent()
         data class GetEpisodesError(val error: String) : DetailEvent()

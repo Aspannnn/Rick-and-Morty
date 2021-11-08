@@ -12,6 +12,7 @@ import kz.aspan.rickandmorty.data.remote.RickAndMortyApi
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
+import kz.aspan.rickandmorty.domain.model.location.Location
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
 import retrofit2.HttpException
 import retrofit2.Response
@@ -93,6 +94,22 @@ class RickAndMortyRepositoryImpl @Inject constructor(
 
         return if (response.isSuccessful && response.body() != null) {
             Resource.Success(listOf(response.body()!!))
+        } else {
+            Resource.Error("Unknown Error")
+        }
+    }
+
+    override suspend fun getLocationById(id: String): Resource<Location> {
+        val response = try {
+            api.getLocationById(id)
+        } catch (e: HttpException) {
+            return Resource.Error("Something went wrong. Please try again later.")
+        } catch (e: IOException) {
+            return Resource.Error("Couldn\'t reach server. Check your internet connection")
+        }
+
+        return if (response.isSuccessful && response.body() != null) {
+            Resource.Success(response.body()!!)
         } else {
             Resource.Error("Unknown Error")
         }
