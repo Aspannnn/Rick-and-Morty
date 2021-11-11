@@ -90,7 +90,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     }
 
     private fun listenToEvents() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.episodes.collect { event ->
+        viewModel.detailEvent.collect { event ->
             if (event is CharacterDetailViewModel.DetailEvent.GetEpisodesError) {
                 snackbar(event.error)
             }
