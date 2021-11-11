@@ -9,12 +9,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentEpisodeBinding
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.adapters.CharacterAdapter
+import kz.aspan.rickandmorty.common.snackbar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,7 +35,7 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEpisodeBinding.bind(view)
-
+        listenToEvent()
         subscribeToObservers()
         setRecyclerView()
 
@@ -54,7 +56,7 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
 
 
     private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.character.collectLatest{ event ->
+        viewModel.character.collectLatest { event ->
             when (event) {
                 is EpisodeViewModel.EpisodeEvent.Loading -> {
                 }
@@ -63,7 +65,14 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
                 }
                 else -> Unit
             }
+        }
+    }
 
+    private fun listenToEvent() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.episodeEvent.collect { event ->
+            if (event is EpisodeViewModel.EpisodeEvent.GetCharacterError) {
+                snackbar(event.error)
+            }
         }
     }
 

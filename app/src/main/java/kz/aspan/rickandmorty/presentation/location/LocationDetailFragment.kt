@@ -8,10 +8,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.adapters.CharacterAdapter
 import kz.aspan.rickandmorty.common.navigateSafely
+import kz.aspan.rickandmorty.common.snackbar
 import kz.aspan.rickandmorty.databinding.FragmentLocationDetailBinding
 import javax.inject.Inject
 
@@ -32,6 +34,7 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLocationDetailBinding.bind(view)
         subscribeToObservers()
+        listenToEvent()
         setRecyclerView()
 
         characterAdapter.setOnCharacterClickListener { character ->
@@ -71,6 +74,20 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
                     }
                     else -> Unit
                 }
+            }
+        }
+    }
+
+    private fun listenToEvent() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.locationEvent.collect { event ->
+            when (event) {
+                is LocationDetailViewModel.LocationEvent.GetLocationError -> {
+                    snackbar(event.error)
+                }
+                is LocationDetailViewModel.LocationEvent.GetCharacterError -> {
+                    snackbar(event.error)
+                }
+                else -> Unit
             }
         }
     }

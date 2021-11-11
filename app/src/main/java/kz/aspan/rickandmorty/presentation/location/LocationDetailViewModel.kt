@@ -57,7 +57,7 @@ class LocationDetailViewModel @Inject constructor(
                 _location.value = LocationEvent.GetLocation(result.data ?: return@launch)
                 getCharacters(result.data.residents)
             } else {
-                locationEvent
+                _locationEvent.emit(LocationEvent.GetLocationError(result.message ?: return@launch))
             }
         }
     }
@@ -74,6 +74,7 @@ class LocationDetailViewModel @Inject constructor(
             if (result is Resource.Success) {
                 _character.value = LocationEvent.GetCharacter(result.data ?: return@launch)
             } else {
+                _locationEvent.emit(LocationEvent.GetCharacterError(result.message ?: return@launch))
             }
         }
     }

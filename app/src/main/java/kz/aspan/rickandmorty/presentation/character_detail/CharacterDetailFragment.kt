@@ -11,12 +11,14 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.adapters.EpisodeAdapter
+import kz.aspan.rickandmorty.common.snackbar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +39,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         _binding = FragmentCharacterDetailBinding.bind(view)
         val character: Character = args.character
         subscribeToObservers()
+        listenToEvents()
         setupRecyclerView()
         binding.apply {
             characterIv.load(character.image)
@@ -83,6 +86,14 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
                 else -> Unit
             }
 
+        }
+    }
+
+    private fun listenToEvents() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.episodes.collect { event ->
+            if (event is CharacterDetailViewModel.DetailEvent.GetEpisodesError) {
+                snackbar(event.error)
+            }
         }
     }
 
