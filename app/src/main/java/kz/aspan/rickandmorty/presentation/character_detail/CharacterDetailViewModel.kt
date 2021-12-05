@@ -1,16 +1,13 @@
 package kz.aspan.rickandmorty.presentation.character_detail
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kz.aspan.rickandmorty.common.Resource
+import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
@@ -22,18 +19,7 @@ class CharacterDetailViewModel @Inject constructor(
     args: SavedStateHandle
 ) : ViewModel() {
 
-    sealed class DetailEvent() {
-        data class GetEpisodes(val episodes: List<Episode>) : DetailEvent()
-        data class GetEpisodesError(val error: String) : DetailEvent()
-        object GetEpisodeLoading : DetailEvent()
-        object GetEpisodeEmpty : DetailEvent()
-    }
-
-    private val _detailEvent = MutableSharedFlow<DetailEvent>()
-    val detailEvent: SharedFlow<DetailEvent> = _detailEvent
-
-    private val _episodes = MutableStateFlow<DetailEvent>(DetailEvent.GetEpisodeEmpty)
-    val episodes: StateFlow<DetailEvent> = _episodes
+    val episodeMutableLiveData = MutableLiveData<Response<List<Episode>?>?>()
 
     init {
         args.get<Character>("character")?.let {
@@ -42,20 +28,18 @@ class CharacterDetailViewModel @Inject constructor(
     }
 
     private fun getEpisodes(urls: List<String>) {
-        _episodes.value = DetailEvent.GetEpisodeLoading
         viewModelScope.launch {
+            episodeMutableLiveData.postValue(Response.Loading())
             val ids = getIds(urls)
+            try {
+                val result = if (urls.size > 1) {
+                    repository.getMultipleEpisodes(ids)
+                } else {
+                    listOf(repository.getEpisode(ids))
+                }
+                episodeMutableLiveData.postValue(Response.Success(result))
+            } catch (e: Exception) {
 
-            val result = if (urls.size > 1) {
-                repository.getMultipleEpisodes(ids)
-            } else {
-                repository.getEpisode(ids)
-            }
-
-            if (result is Resource.Success) {
-                _episodes.value = DetailEvent.GetEpisodes(result.data ?: return@launch)
-            } else {
-                _detailEvent.emit(DetailEvent.GetEpisodesError(result.message ?: return@launch))
             }
         }
     }

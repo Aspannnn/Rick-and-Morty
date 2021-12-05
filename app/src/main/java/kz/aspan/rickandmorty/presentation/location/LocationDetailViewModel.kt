@@ -1,6 +1,7 @@
 package kz.aspan.rickandmorty.presentation.location
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.common.Resource
+import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.location.Location
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
@@ -20,25 +22,8 @@ class LocationDetailViewModel @Inject constructor(
     args: SavedStateHandle
 ) : ViewModel() {
 
-    sealed class LocationEvent() {
-        data class GetLocation(val location: Location) : LocationEvent()
-        data class GetLocationError(val error: String) : LocationEvent()
-
-        data class GetCharacter(val characters: List<Character>) : LocationEvent()
-        data class GetCharacterError(val error: String) : LocationEvent()
-
-        object Loading : LocationEvent()
-        object EmptyObject : LocationEvent()
-    }
-
-    private val _location = MutableStateFlow<LocationEvent>(LocationEvent.EmptyObject)
-    val location: MutableStateFlow<LocationEvent> = _location
-
-    private val _character = MutableStateFlow<LocationEvent>(LocationEvent.EmptyObject)
-    val character: StateFlow<LocationEvent> = _character
-
-    private val _locationEvent = MutableSharedFlow<LocationEvent>()
-    val locationEvent: SharedFlow<LocationEvent> = _locationEvent
+    val characterMutableLiveData = MutableLiveData<Response<List<Character>?>?>()
+    val locationMutableLiveData = MutableLiveData<Response<Location>?>()
 
 
     init {
@@ -52,29 +37,30 @@ class LocationDetailViewModel @Inject constructor(
 
     private fun getLocationById(id: String) {
         viewModelScope.launch {
-            val result = repository.getLocationById(id)
-            if (result is Resource.Success) {
-                _location.value = LocationEvent.GetLocation(result.data ?: return@launch)
-                getCharacters(result.data.residents)
-            } else {
-                _locationEvent.emit(LocationEvent.GetLocationError(result.message ?: return@launch))
+            locationMutableLiveData.postValue(Response.Loading())
+            try {
+                val result = repository.getLocationById(id)
+                locationMutableLiveData.postValue(Response.Success(result))
+                getCharacters(result.residents)
+            } catch (e: Exception) {
+
             }
         }
     }
 
     private fun getCharacters(urls: List<String>) {
         viewModelScope.launch {
+            characterMutableLiveData.postValue(Response.Loading())
             val ids = getIds(urls)
-            val result = if (urls.size > 1) {
-                repository.getMultipleCharacters(ids)
-            } else {
-                repository.getCharacterById(ids)
-            }
+            try {
+                val result = if (urls.size > 1) {
+                    repository.getMultipleCharacters(ids)
+                } else {
+                    listOf(repository.getCharacterById(ids))
+                }
+                characterMutableLiveData.postValue(Response.Success(result))
+            } catch (e: Exception) {
 
-            if (result is Resource.Success) {
-                _character.value = LocationEvent.GetCharacter(result.data ?: return@launch)
-            } else {
-                _locationEvent.emit(LocationEvent.GetCharacterError(result.message ?: return@launch))
             }
         }
     }

@@ -1,18 +1,15 @@
 package kz.aspan.rickandmorty.presentation.characters
 
-import androidx.lifecycle.SavedStateHandle
+import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kz.aspan.rickandmorty.common.Resource
+import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.domain.model.character.Character
+import kz.aspan.rickandmorty.domain.model.character.CharacterInfo
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
-import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -20,53 +17,39 @@ import javax.inject.Inject
 class CharactersViewModel @Inject constructor(
     private val repository: RickAndMortyRepository,
 ) : ViewModel() {
-
-
-    sealed class CharactersEvent {
-        data class GetAllCharactersEvent(val characters: Flow<PagingData<Character>>) :
-            CharactersEvent()
-
-        data class GetAllCharactersErrorEvent(val error: String) : CharactersEvent()
-        object GetAllCharactersLoadingEvent : CharactersEvent()
-        object GetAllCharactersEmptyEvent : CharactersEvent()
-    }
-
-    private val _characters =
-        MutableStateFlow<CharactersEvent>(CharactersEvent.GetAllCharactersEmptyEvent)
-    val characters: StateFlow<CharactersEvent> = _characters
-
-    private val _charactersEvent = MutableSharedFlow<CharactersEvent>()
-    val charactersEvent: SharedFlow<CharactersEvent> = _charactersEvent
-
-    private val _filteredCharacters =
-        MutableStateFlow<CharactersEvent>(CharactersEvent.GetAllCharactersEmptyEvent)
-    val filteredCharacters: StateFlow<CharactersEvent> = _filteredCharacters
+    val characterMutableLiveData = MutableLiveData<Response<MutableList<Character>?>?>()
+    private var charactersInfo: CharacterInfo? = null
+    private var oldCharacterList = mutableListOf<Character>()
 
     init {
-        getAllCharacters()
+        getCharacters()
     }
 
-    fun filterCharacterByName(name: String, status: String = "") {
+
+    private fun getCharacters(page: Int = 1) {
         viewModelScope.launch {
+            characterMutableLiveData.postValue(Response.Loading())
             try {
-                val result = repository.getCharacterByName(name, status).cachedIn(viewModelScope)
-                _filteredCharacters.value = CharactersEvent.GetAllCharactersEvent(result)
+                val result = repository.getAllCharacters(page)
+                oldCharacterList.addAll(result.listOfCharacter)
+                characterMutableLiveData.postValue(Response.Success(oldCharacterList))
+                charactersInfo = result.info
             } catch (e: Exception) {
-                _charactersEvent.emit(CharactersEvent.GetAllCharactersErrorEvent(e.localizedMessage))
+                characterMutableLiveData.postValue(Response.Error(e))
+                characterMutableLiveData.postValue(null)
             }
         }
     }
 
-    private fun getAllCharacters() {
-        viewModelScope.launch {
-            try {
-                val result = repository.getAllCharacters().cachedIn(viewModelScope)
-                _characters.value = CharactersEvent.GetAllCharactersEvent(result)
-            } catch (e: Exception) {
-                _charactersEvent.emit(CharactersEvent.GetAllCharactersErrorEvent(e.localizedMessage))
+    fun nextPage() {
+        charactersInfo?.let {
+            if (it.next != null) {
+                val uri = Uri.parse(it.next)
+                println("TEST   ${uri.lastPathSegment}")
+                val nextPageQuery = uri.getQueryParameter("page")!!.toInt()
+                getCharacters(nextPageQuery)
             }
         }
     }
-
-
 }
+

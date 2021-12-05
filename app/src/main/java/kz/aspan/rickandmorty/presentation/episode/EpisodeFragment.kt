@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentEpisodeBinding
 import kz.aspan.rickandmorty.domain.model.episode.Episode
-import kz.aspan.rickandmorty.adapters.CharacterAdapter
-import kz.aspan.rickandmorty.common.snackbar
+import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,12 +27,11 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     private val args: EpisodeFragmentArgs by navArgs()
 
     @Inject
-    lateinit var characterAdapter: CharacterAdapter
+    lateinit var characterAdapter: CharacterListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEpisodeBinding.bind(view)
-        listenToEvent()
         subscribeToObservers()
         setRecyclerView()
 
@@ -54,27 +50,22 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
         }
     }
 
-
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.character.collectLatest { event ->
-            when (event) {
-                is EpisodeViewModel.EpisodeEvent.Loading -> {
+    private fun subscribeToObservers() {
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    response.data?.let { episode ->
+                        characterAdapter.submitList(episode)
+                    }
                 }
-                is EpisodeViewModel.EpisodeEvent.GetCharacter -> {
-                    characterAdapter.updateDataset(event.characters)
+                is Response.Error -> {
+                    TODO("Agai dan surau kerek")
                 }
-                else -> Unit
             }
-        }
+        })
     }
 
-    private fun listenToEvent() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.episodeEvent.collect { event ->
-            if (event is EpisodeViewModel.EpisodeEvent.GetCharacterError) {
-                snackbar(event.error)
-            }
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()

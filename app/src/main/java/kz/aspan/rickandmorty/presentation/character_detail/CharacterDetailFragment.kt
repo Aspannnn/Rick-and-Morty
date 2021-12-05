@@ -5,20 +5,17 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharacterDetailBinding
 import kz.aspan.rickandmorty.domain.model.character.Character
-import kz.aspan.rickandmorty.adapters.EpisodeAdapter
-import kz.aspan.rickandmorty.common.snackbar
+import kz.aspan.rickandmorty.adapters.EpisodeListAdapter
+import kz.aspan.rickandmorty.common.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,14 +29,13 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     private val args: CharacterDetailFragmentArgs by navArgs()
 
     @Inject
-    lateinit var episodeAdapter: EpisodeAdapter
+    lateinit var episodeAdapter: EpisodeListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCharacterDetailBinding.bind(view)
         val character: Character = args.character
         subscribeToObservers()
-        listenToEvents()
         setupRecyclerView()
         binding.apply {
             characterIv.load(character.image)
@@ -75,26 +71,20 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     }
 
 
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.episodes.collectLatest { event ->
-            when (event) {
-                is CharacterDetailViewModel.DetailEvent.GetEpisodeLoading -> {
+    private fun subscribeToObservers() {
+        viewModel.episodeMutableLiveData.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    response.data?.let { episode ->
+                        episodeAdapter.submitList(episode)
+                    }
                 }
-                is CharacterDetailViewModel.DetailEvent.GetEpisodes -> {
-                    episodeAdapter.updateDataset(event.episodes)
+                is Response.Error -> {
+                    TODO("Agai dan surau kerek")
                 }
-                else -> Unit
             }
-
-        }
-    }
-
-    private fun listenToEvents() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.detailEvent.collect { event ->
-            if (event is CharacterDetailViewModel.DetailEvent.GetEpisodesError) {
-                snackbar(event.error)
-            }
-        }
+        })
     }
 
 

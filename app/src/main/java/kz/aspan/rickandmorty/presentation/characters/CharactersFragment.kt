@@ -5,17 +5,20 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
+import kz.aspan.rickandmorty.adapters.CharacterListAdapter
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
-import kz.aspan.rickandmorty.adapters.CharacterPagingAdapter
+import kz.aspan.rickandmorty.common.PaginationScrollListener
+import kz.aspan.rickandmorty.common.Response
+import kz.aspan.rickandmorty.common.snackbar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,9 +29,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
     private val viewModel: CharactersViewModel by viewModels()
 
-
     @Inject
-    lateinit var charactersAdapter: CharacterPagingAdapter
+    lateinit var characterAdapter: CharacterListAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +38,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         _binding = FragmentCharactersBinding.bind(view)
         setupRecyclerView()
         subscribeToObservers()
-        charactersAdapter.setOnClickListener { character ->
+
+        characterAdapter.setOnCharacterClickListener { character ->
             findNavController().navigateSafely(
                 R.id.action_charactersFragment_to_characterDetailFragment,
                 Bundle().apply {
@@ -46,11 +49,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         }
 
         binding.searchEt.addTextChangedListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(300L)
-                viewModel.filterCharacterByName(it.toString())
-            }
+//            viewLifecycleOwner.lifecycleScope.launch {
+//            }
         }
+
     }
 
 
@@ -59,27 +61,39 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         _binding = null
     }
 
-
-    private fun subscribeToObservers() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.characters.collectLatest { event ->
-            when (event) {
-                is CharactersViewModel.CharactersEvent.GetAllCharactersLoadingEvent -> {
-                }
-                is CharactersViewModel.CharactersEvent.GetAllCharactersEvent -> {
-                    event.characters.collectLatest {
-                        charactersAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+    private fun subscribeToObservers() {
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    response.data?.let { characters ->
+                        characterAdapter.submitList(characters.toMutableList())
                     }
                 }
-                else -> Unit
+                is Response.Error -> {
+                    TODO("Agai dan surau kerek")
+                }
             }
-        }
+        })
     }
 
-
     private fun setupRecyclerView() {
+        var isLoading = false
+        val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.charactersRv.apply {
-            adapter = charactersAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            adapter = characterAdapter
+            layoutManager = linearLayoutManager
+            addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {
+                override fun isLoading(): Boolean {
+                    return isLoading
+                }
+
+                override fun loadMoreItems() {
+                    isLoading = true
+                    viewModel.nextPage()
+                    isLoading = false
+                }
+            })
         }
     }
 }

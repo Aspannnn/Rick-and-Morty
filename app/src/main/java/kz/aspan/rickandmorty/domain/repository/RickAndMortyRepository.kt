@@ -1,18 +1,16 @@
 package kz.aspan.rickandmorty.domain.repository
 
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
 import kz.aspan.rickandmorty.common.Resource
 import kz.aspan.rickandmorty.domain.model.character.Character
+import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.domain.model.location.Location
 
 interface RickAndMortyRepository {
-    fun getAllCharacters(): Flow<PagingData<Character>>
-    fun getCharacterByName(name: String, status: String): Flow<PagingData<Character>>
-    suspend fun getMultipleEpisodes(ids: String): Resource<List<Episode>>
-    suspend fun getEpisode(id: String): Resource<List<Episode>>
-    suspend fun getMultipleCharacters(ids: String): Resource<List<Character>>
-    suspend fun getCharacterById(id: String): Resource<List<Character>>
-    suspend fun getLocationById(id: String): Resource<Location>
+    suspend fun getAllCharacters(page: Int): Characters
+    suspend fun getMultipleEpisodes(ids: String): List<Episode>
+    suspend fun getEpisode(id: String): Episode
+    suspend fun getMultipleCharacters(ids: String): List<Character>
+    suspend fun getCharacterById(id: String): Character
+    suspend fun getLocationById(id: String): Location
 }

@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kz.aspan.rickandmorty.R
-import kz.aspan.rickandmorty.adapters.CharacterAdapter
+import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.common.navigateSafely
-import kz.aspan.rickandmorty.common.snackbar
 import kz.aspan.rickandmorty.databinding.FragmentLocationDetailBinding
 import javax.inject.Inject
 
@@ -28,13 +25,12 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
     private val viewModel: LocationDetailViewModel by viewModels()
 
     @Inject
-    lateinit var characterAdapter: CharacterAdapter
+    lateinit var characterAdapter: CharacterListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLocationDetailBinding.bind(view)
         subscribeToObservers()
-        listenToEvent()
         setRecyclerView()
 
         characterAdapter.setOnCharacterClickListener { character ->
@@ -47,51 +43,37 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
 
 
     private fun subscribeToObservers() {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.location.collectLatest { event ->
-                when (event) {
-                    is LocationDetailViewModel.LocationEvent.Loading -> {
+        viewModel.locationMutableLiveData.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    val location = response.data
+                    binding.apply {
+                        locationNameTv.text = location.name
+                        dimensionTv.text = location.dimension
+                        typeTv.text = location.type
                     }
-                    is LocationDetailViewModel.LocationEvent.GetLocation -> {
-                        val location = event.location
-                        binding.apply {
-                            locationNameTv.text = location.name
-                            dimensionTv.text = location.dimension
-                            typeTv.text = location.type
-                        }
-                    }
-                    else -> Unit
+                }
+                is Response.Error -> {
+                    TODO("Agai dan surau kerek")
                 }
             }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.character.collectLatest { event ->
-                when (event) {
-                    is LocationDetailViewModel.LocationEvent.Loading -> {
-                    }
-                    is LocationDetailViewModel.LocationEvent.GetCharacter -> {
-                        characterAdapter.updateDataset(event.characters)
-                    }
-                    else -> Unit
-                }
-            }
-        }
-    }
+        })
 
-    private fun listenToEvent() = viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.locationEvent.collect { event ->
-            when (event) {
-                is LocationDetailViewModel.LocationEvent.GetLocationError -> {
-                    snackbar(event.error)
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Response.Loading -> {}
+                is Response.Success -> {
+                    response.data?.let { characters ->
+                        characterAdapter.submitList(characters.toMutableList())
+                    }
                 }
-                is LocationDetailViewModel.LocationEvent.GetCharacterError -> {
-                    snackbar(event.error)
+                is Response.Error -> {
+                    TODO("Agai dan surau kerek")
                 }
-                else -> Unit
             }
-        }
+        })
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

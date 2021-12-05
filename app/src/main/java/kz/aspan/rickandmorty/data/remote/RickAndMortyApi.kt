@@ -4,7 +4,6 @@ import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.domain.model.location.Location
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -12,28 +11,28 @@ import retrofit2.http.Query
 interface RickAndMortyApi {
 
     @GET("character/")
-    suspend fun getAllCharacters(@Query("page") page: Int): Response<Characters>
+    suspend fun getAllCharacters(@Query("page") page: Int): Characters
 
     @GET("episode/{id}")
-    suspend fun getMultipleEpisodes(@Path("id") ids: String): Response<List<Episode>>
+    suspend fun getMultipleEpisodes(@Path("id") ids: String): List<Episode>
 
     @GET("episode/{id}")
-    suspend fun getEpisode(@Path("id") id: String): Response<Episode>
+    suspend fun getEpisode(@Path("id") id: String): Episode
 
     @GET("character/{id}")
-    suspend fun getMultipleCharacters(@Path("id") ids: String): Response<List<Character>>
+    suspend fun getMultipleCharacters(@Path("id") ids: String): List<Character>
 
     @GET("character/{id}")
-    suspend fun getCharacterById(@Path("id") ids: String): Response<Character>
+    suspend fun getCharacterById(@Path("id") ids: String): Character
 
     @GET("character/")
     suspend fun getCharacterByName(
         @Query("page") page: Int,
         @Query("name") name: String,
         @Query("status") status: String
-    ): Response<Characters>
+    ): Characters
 
 
     @GET("location/{id}")
-    suspend fun getLocationById(@Path("id") id: String):Response<Location>
+    suspend fun getLocationById(@Path("id") id: String): Location
 }

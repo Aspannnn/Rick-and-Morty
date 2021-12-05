@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class Characters(
     val info: CharacterInfo,
     @SerializedName("results")
-    val listOfCharacter: List<Character>
+    val listOfCharacter: MutableList<Character>
 )
