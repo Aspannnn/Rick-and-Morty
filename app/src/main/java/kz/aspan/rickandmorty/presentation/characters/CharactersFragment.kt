@@ -11,10 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.Constants.CHARACTERS
+import kz.aspan.rickandmorty.common.Constants.FILTER_CHARACTER
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
 import kz.aspan.rickandmorty.common.PaginationScrollListener
@@ -23,6 +26,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
+
+
     private var _binding: FragmentCharactersBinding? = null
     private val binding: FragmentCharactersBinding
         get() = _binding!!
@@ -32,8 +37,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     @Inject
     lateinit var characterAdapter: CharacterListAdapter
 
-    private var isFilterCharacter = false
-
+    private var who = CHARACTERS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,19 +54,16 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
             )
         }
 
-//        binding.searchEt.addTextChangedListener {
-//            viewLifecycleOwner.lifecycleScope.launch {
-//                delay(3000)
-//                if (it.isNullOrEmpty()) {
-//                    isFilterCharacter = false
-//                    viewModel.returnToCharacter()
-//                } else {
-//                    isFilterCharacter = true
-//                    viewModel.filterCharacter(name = it.toString())
-//                    LinearLayoutManager(requireContext()).scrollToPosition(0)
-//                }
-//            }
-//        }
+        var searchJob: Job? = null
+        binding.searchEt.addTextChangedListener {
+            searchJob?.cancel()
+            searchJob = lifecycleScope.launch {
+                delay(3000)
+                viewModel.filterCharacter(page = 1, name = it.toString())
+                LinearLayoutManager(requireContext()).scrollToPosition(0)
+                isLastPage = viewModel.isFilterLastPage
+            }
+        }
     }
 
 
@@ -81,8 +82,12 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                     hideProgressBar()
                     response.data?.let { characters ->
                         characterAdapter.submitList(characters.toList())
-                        val totalPages = viewModel.charactersInfo?.pages
-                        isLastPage = viewModel.page == totalPages
+
+                        isLastPage = if (who == FILTER_CHARACTER) {
+                            viewModel.isFilterLastPage
+                        } else {
+                            viewModel.isCharacterLastPage
+                        }
                     }
                 }
                 is Response.Error -> {
@@ -90,6 +95,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                     TODO("Agai dan surau kerek")
                 }
             }
+        })
+
+        viewModel.whoMakesTheRequest.observe(viewLifecycleOwner, {
+            who = it
         })
     }
 
@@ -124,11 +133,11 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                 }
 
                 override fun loadMoreItems() {
-//                    if (isFilterCharacter) {
-//                        viewModel.filterNextPage()
-//                    } else {
-                    viewModel.nextPage()
-//                    }
+                    if (who == CHARACTERS) {
+                        viewModel.getCharacters()
+                    } else {
+                        viewModel.filterCharacter()
+                    }
                     isLoading = false
                 }
 

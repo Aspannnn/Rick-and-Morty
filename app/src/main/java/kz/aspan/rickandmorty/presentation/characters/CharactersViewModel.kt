@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kz.aspan.rickandmorty.common.Constants.CHARACTERS
+import kz.aspan.rickandmorty.common.Constants.FILTER_CHARACTER
 import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.domain.model.character.Character
-import kz.aspan.rickandmorty.domain.model.character.CharacterInfo
 import kz.aspan.rickandmorty.domain.repository.RickAndMortyRepository
 import javax.inject.Inject
 import kotlin.Exception
@@ -19,72 +20,78 @@ class CharactersViewModel @Inject constructor(
 ) : ViewModel() {
     val characterMutableLiveData = MutableLiveData<Response<MutableList<Character>?>?>()
 
-    var charactersInfo: CharacterInfo? = null
     private var oldCharacterList = mutableListOf<Character>()
+    private var curPage = 1
+    var isCharacterLastPage = false
 
-    private var filterCharacterInfo: CharacterInfo? = null
+
     private var oldFilteredCharacterList = mutableListOf<Character>()
     private var oldName: String = ""
+    var isFilterLastPage = false
+    private var filterCurPage = 1
 
-    var page = 1
+    val whoMakesTheRequest = MutableLiveData<Int>()
+
     init {
-        getCharacters()
+        getCharacters(curPage)
     }
 
 
-    fun filterCharacter(page: Int = 1, name: String, status: String = "") {
+    fun filterCharacter(page: Int = filterCurPage, name: String = oldName, status: String = "") {
         if (oldName != name) {
             oldFilteredCharacterList.clear()
+            isFilterLastPage = false
+        } else {
+            characterMutableLiveData.postValue(Response.Success(oldFilteredCharacterList))
         }
-        viewModelScope.launch {
-            characterMutableLiveData.postValue(Response.Loading())
-            try {
-                val result = repository.getFilterCharacter(page, name, status)
-                oldFilteredCharacterList.addAll(result.listOfCharacter)
-                characterMutableLiveData.postValue(Response.Success(oldFilteredCharacterList))
-                filterCharacterInfo = result.info
-                oldName = name
-            } catch (e: Exception) {
-                characterMutableLiveData.postValue(Response.Error(e))
-                characterMutableLiveData.postValue(null)
+        if (name.isEmpty()) {
+            characterMutableLiveData.postValue(Response.Success(oldCharacterList))
+            whoMakesTheRequest.postValue(CHARACTERS)
+        } else if (oldName != name) {
+            whoMakesTheRequest.postValue(FILTER_CHARACTER)
+            viewModelScope.launch {
+                characterMutableLiveData.postValue(Response.Loading())
+                try {
+                    val result = repository.getFilterCharacter(page, name, status)
+
+                    oldFilteredCharacterList.addAll(result.listOfCharacter)
+                    characterMutableLiveData.postValue(Response.Success(oldFilteredCharacterList))
+
+                    val filterInfo = result.info
+                    if (filterInfo.next != null) {
+                        val uri = Uri.parse(filterInfo.next)
+                        filterCurPage = uri.getQueryParameter("page")!!.toInt()
+                    } else {
+                        isFilterLastPage = true
+                    }
+
+                    oldName = name
+                } catch (e: Exception) {
+                    characterMutableLiveData.postValue(Response.Error(e))
+                    characterMutableLiveData.postValue(null)
+                }
             }
         }
     }
 
-    fun filterNextPage() {
-        filterCharacterInfo?.let {
-            if (it.next != null) {
-                val uri = Uri.parse(it.next)
-                val nextPageQuery = uri.getQueryParameter("page")!!.toInt()
-                filterCharacter(page = nextPageQuery, name = oldName)
-            }
-        }
-    }
 
-    fun returnToCharacter() {
-        characterMutableLiveData.postValue(Response.Success(oldCharacterList))
-    }
-
-    fun nextPage() {
-        charactersInfo?.let {
-            if (it.next != null) {
-                val uri = Uri.parse(it.next)
-                val nextPageQuery = uri.getQueryParameter("page")!!.toInt()
-                getCharacters(nextPageQuery)
-                page = nextPageQuery
-                println("TEST GET $nextPageQuery")
-            }
-        }
-    }
-
-    private fun getCharacters(page: Int = 1) {
+    fun getCharacters(page: Int = curPage) {
+        whoMakesTheRequest.postValue(CHARACTERS)
         viewModelScope.launch {
             characterMutableLiveData.postValue(Response.Loading())
             try {
                 val result = repository.getAllCharacters(page)
+
                 oldCharacterList.addAll(result.listOfCharacter)
                 characterMutableLiveData.postValue(Response.Success(oldCharacterList))
-                charactersInfo = result.info
+
+                val charactersInfo = result.info
+                if (charactersInfo.next != null) {
+                    val uri = Uri.parse(charactersInfo.next)
+                    curPage = uri.getQueryParameter("page")!!.toInt()
+                } else {
+                    isCharacterLastPage = true
+                }
             } catch (e: Exception) {
                 characterMutableLiveData.postValue(Response.Error(e))
                 characterMutableLiveData.postValue(null)

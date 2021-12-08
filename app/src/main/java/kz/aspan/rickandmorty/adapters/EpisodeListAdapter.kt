@@ -56,13 +56,4 @@ class EpisodeListAdapter @Inject constructor() :
     fun setOnEpisodeClickListener(listener: (Episode) -> Unit) {
         onEpisodeClickListener = listener
     }
-
-    private fun completeEpisode(str: String): String {
-        str.replace("S", "Season ")
-        str.replace("E", " Episode ")
-
-        return str
-    }
-
-
 }
