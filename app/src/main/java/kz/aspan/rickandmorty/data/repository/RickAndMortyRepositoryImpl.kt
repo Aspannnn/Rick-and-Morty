@@ -36,5 +36,9 @@ class RickAndMortyRepositoryImpl @Inject constructor(
         return api.getLocationById(id)
     }
 
+    override suspend fun getFilterCharacter(page: Int, name: String, status: String): Characters {
+        return api.getFilterCharacter(page, name, status)
+    }
+
 
 }

@@ -26,7 +26,7 @@ interface RickAndMortyApi {
     suspend fun getCharacterById(@Path("id") ids: String): Character
 
     @GET("character/")
-    suspend fun getCharacterByName(
+    suspend fun getFilterCharacter(
         @Query("page") page: Int,
         @Query("name") name: String,
         @Query("status") status: String

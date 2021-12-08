@@ -2,13 +2,14 @@ package kz.aspan.rickandmorty.presentation.characters
 
 import android.os.Bundle
 import android.view.View
+import android.widget.AbsListView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,7 +19,6 @@ import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
 import kz.aspan.rickandmorty.common.PaginationScrollListener
 import kz.aspan.rickandmorty.common.Response
-import kz.aspan.rickandmorty.common.snackbar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +31,8 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
 
     @Inject
     lateinit var characterAdapter: CharacterListAdapter
+
+    private var isFilterCharacter = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,11 +50,19 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
             )
         }
 
-        binding.searchEt.addTextChangedListener {
+//        binding.searchEt.addTextChangedListener {
 //            viewLifecycleOwner.lifecycleScope.launch {
+//                delay(3000)
+//                if (it.isNullOrEmpty()) {
+//                    isFilterCharacter = false
+//                    viewModel.returnToCharacter()
+//                } else {
+//                    isFilterCharacter = true
+//                    viewModel.filterCharacter(name = it.toString())
+//                    LinearLayoutManager(requireContext()).scrollToPosition(0)
+//                }
 //            }
-        }
-
+//        }
     }
 
 
@@ -64,34 +74,69 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     private fun subscribeToObservers() {
         viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
             when (response) {
-                is Response.Loading -> {}
+                is Response.Loading -> {
+                    showProgressBar()
+                }
                 is Response.Success -> {
+                    hideProgressBar()
                     response.data?.let { characters ->
-                        characterAdapter.submitList(characters.toMutableList())
+                        characterAdapter.submitList(characters.toList())
+                        val totalPages = viewModel.charactersInfo?.pages
+                        isLastPage = viewModel.page == totalPages
                     }
                 }
                 is Response.Error -> {
+                    hideProgressBar()
                     TODO("Agai dan surau kerek")
                 }
             }
         })
     }
 
+    private fun hideProgressBar() {
+        isLoading = false
+    }
+
+    private fun showProgressBar() {
+        isLoading = true
+    }
+
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
     private fun setupRecyclerView() {
-        var isLoading = false
-        val linearLayoutManager = LinearLayoutManager(requireContext())
+        val linearLayoutManager = LinearLayoutManager(requireActivity())
         binding.charactersRv.apply {
             adapter = characterAdapter
             layoutManager = linearLayoutManager
+
             addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {
                 override fun isLoading(): Boolean {
                     return isLoading
                 }
 
+                override fun isLastPage(): Boolean {
+                    return isLastPage
+                }
+
+                override fun isScrolling(): Boolean {
+                    return isScrolling
+                }
+
                 override fun loadMoreItems() {
-                    isLoading = true
+//                    if (isFilterCharacter) {
+//                        viewModel.filterNextPage()
+//                    } else {
                     viewModel.nextPage()
+//                    }
                     isLoading = false
+                }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                        isScrolling = true
+                    }
                 }
             })
         }

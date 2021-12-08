@@ -1,6 +1,5 @@
 package kz.aspan.rickandmorty.domain.repository
 
-import kz.aspan.rickandmorty.common.Resource
 import kz.aspan.rickandmorty.domain.model.character.Character
 import kz.aspan.rickandmorty.domain.model.character.Characters
 import kz.aspan.rickandmorty.domain.model.episode.Episode
@@ -13,4 +12,5 @@ interface RickAndMortyRepository {
     suspend fun getMultipleCharacters(ids: String): List<Character>
     suspend fun getCharacterById(id: String): Character
     suspend fun getLocationById(id: String): Location
+    suspend fun getFilterCharacter(page: Int, name: String, status: String): Characters
 }
