@@ -47,7 +47,7 @@ class CharactersViewModel @Inject constructor(
         if (name.isEmpty()) {
             characterMutableLiveData.postValue(Response.Success(oldCharacterList))
             whoMakesTheRequest.postValue(CHARACTERS)
-        } else if (oldName != name) {
+        } else if ((oldName != name && page == 1) || (oldName == name && page != 1)) {
             whoMakesTheRequest.postValue(FILTER_CHARACTER)
             viewModelScope.launch {
                 characterMutableLiveData.postValue(Response.Loading())
