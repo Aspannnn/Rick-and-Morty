@@ -16,7 +16,7 @@
             android:id="@+id/collapsingToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="@color/ghost_white"
+            app:contentScrim="?attr/colorOnPrimarySurface"
             app:expandedTitleGravity="center_horizontal|bottom"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="@string/app_name">

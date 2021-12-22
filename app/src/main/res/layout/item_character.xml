@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/ghost_white"
+    app:cardBackgroundColor="?attr/colorOnPrimarySurface"
     app:cardCornerRadius="10dp"
     app:cardElevation="56dp">
 
@@ -33,7 +33,7 @@
             android:ellipsize="end"
             android:lines="1"
             android:maxEms="12"
-            android:textColor="@color/denim"
+            android:textColor="?titleFontColor"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/characterImageInCv"
