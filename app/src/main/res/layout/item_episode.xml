@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -7,15 +9,29 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_baseline_live_tv_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/episodeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Episode 1" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Episode 1"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/episodeTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Something Ricked This Way Comes" />
-</LinearLayout>
+        android:text="Something Ricked This Way Comes"
+        app:layout_constraintStart_toStartOf="@+id/episodeTv"
+        app:layout_constraintTop_toBottomOf="@+id/episodeTv" />
+</androidx.constraintlayout.widget.ConstraintLayout>

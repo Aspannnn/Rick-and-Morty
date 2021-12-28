@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,6 +109,12 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         binding.rvEpisode.apply {
             adapter = episodeAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(
+                DividerItemDecoration(
+                    activity,
+                    LinearLayoutManager.VERTICAL
+                )
+            )
         }
     }
 }
