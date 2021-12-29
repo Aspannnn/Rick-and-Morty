@@ -2,14 +2,15 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="130dp"
-    android:layout_margin="8dp"
+    android:layout_width="150dp"
+    android:layout_height="222dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="20dp"
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="?attr/colorOnPrimarySurface"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="56dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,48 +19,51 @@
 
         <ImageView
             android:id="@+id/characterImageInCv"
-            android:layout_width="130dp"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="140dp"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/rick" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/characterNameTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:maxEms="12"
-            android:textColor="?titleFontColor"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/characterImageInCv"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Rick Sanchez" />
-
-        <View
-            android:id="@+id/isAliveView"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/is_alive_circle"
-            android:backgroundTint="@color/green_snake"
-            app:layout_constraintStart_toStartOf="@+id/characterNameTv"
-            app:layout_constraintTop_toBottomOf="@+id/characterNameTv" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/statusTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
             android:hint="Dead - Alien"
             android:textColor="@color/denim"
-            android:textSize="15sp"
-            app:layout_constraintStart_toEndOf="@+id/isAliveView"
-            app:layout_constraintTop_toBottomOf="@+id/characterNameTv" />
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/characterImageInCv" />
+
+        <View
+            android:id="@+id/isAliveView"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/is_alive_circle"
+            android:backgroundTint="@color/green_snake"
+            app:layout_constraintBottom_toBottomOf="@+id/statusTv"
+            app:layout_constraintStart_toEndOf="@+id/statusTv"
+            app:layout_constraintTop_toTopOf="@+id/statusTv" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/characterNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxEms="7"
+            android:textColor="?titleFontColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/statusTv"
+            app:layout_constraintTop_toBottomOf="@+id/statusTv"
+            tools:text="Rick Sanchezaaaa" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

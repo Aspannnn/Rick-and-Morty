@@ -21,7 +21,7 @@ class CharactersViewModel @Inject constructor(
     val characterMutableLiveData = MutableLiveData<Response<MutableList<Character>?>?>()
 
     private var oldCharacterList = mutableListOf<Character>()
-    private var curPage = 1
+    private var nextPage = 1
     var isCharacterLastPage = false
 
 
@@ -33,7 +33,7 @@ class CharactersViewModel @Inject constructor(
     val whoMakesTheRequest = MutableLiveData<Int>()
 
     init {
-        getCharacters(curPage)
+        getCharacters(nextPage)
     }
 
 
@@ -75,28 +75,28 @@ class CharactersViewModel @Inject constructor(
     }
 
 
-    fun getCharacters(page: Int = curPage) {
-        whoMakesTheRequest.postValue(CHARACTERS)
-        viewModelScope.launch {
-            characterMutableLiveData.postValue(Response.Loading())
-            try {
-                val result = repository.getAllCharacters(page)
+    fun getCharacters(page: Int = nextPage) {
+            whoMakesTheRequest.postValue(CHARACTERS)
+            viewModelScope.launch {
+                characterMutableLiveData.postValue(Response.Loading())
+                try {
+                    val result = repository.getAllCharacters(page)
 
-                oldCharacterList.addAll(result.listOfCharacter)
-                characterMutableLiveData.postValue(Response.Success(oldCharacterList))
+                    oldCharacterList.addAll(result.listOfCharacter)
+                    characterMutableLiveData.postValue(Response.Success(oldCharacterList))
 
-                val charactersInfo = result.info
-                if (charactersInfo.next != null) {
-                    val uri = Uri.parse(charactersInfo.next)
-                    curPage = uri.getQueryParameter("page")!!.toInt()
-                } else {
-                    isCharacterLastPage = true
+                    val charactersInfo = result.info
+                    if (charactersInfo.next != null) {
+                        val uri = Uri.parse(charactersInfo.next)
+                        nextPage = uri.getQueryParameter("page")!!.toInt()
+                    } else {
+                        isCharacterLastPage = true
+                    }
+                } catch (e: Exception) {
+                    characterMutableLiveData.postValue(Response.Error(e))
+                    characterMutableLiveData.postValue(null)
                 }
-            } catch (e: Exception) {
-                characterMutableLiveData.postValue(Response.Error(e))
-                characterMutableLiveData.postValue(null)
             }
-        }
     }
-}
 
+}
