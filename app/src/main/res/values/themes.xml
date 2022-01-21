@@ -16,5 +16,6 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
         <item name="titleFontColor">@color/denim</item>
+        <item name="subTitleFontColor">@color/denim</item>
     </style>
 </resources>

@@ -6,13 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentEpisodeBinding
 import kz.aspan.rickandmorty.domain.model.episode.Episode
 import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.GridSpacingItemDecoration
 import kz.aspan.rickandmorty.common.Response
 import javax.inject.Inject
 
@@ -73,9 +75,12 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     }
 
     private fun setRecyclerView() {
+        val spanCount = 2
+        val spacing = 100
+        val includeEdge = true
         binding.rvCharacters.apply {
             adapter = characterAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         }
     }
 }

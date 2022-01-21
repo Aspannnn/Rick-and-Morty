@@ -26,9 +26,9 @@ class EpisodeListAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val episode = getItem(position)
         holder.binding.apply {
-            episodeTv.text = episode.episode.replace("S", "Season:").replace("E", " Episode:")
-
-            episodeTitleTv.text = episode.name
+            episodeTv.text = episode.episode
+            episodeNameTv.text = episode.name
+            airDateTv.text = episode.airDate
 
             root.setOnClickListener {
                 onEpisodeClickListener?.let { click ->

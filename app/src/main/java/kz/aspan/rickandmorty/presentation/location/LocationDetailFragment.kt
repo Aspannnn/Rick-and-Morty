@@ -5,10 +5,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.GridSpacingItemDecoration
 import kz.aspan.rickandmorty.common.Response
 import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentLocationDetailBinding
@@ -81,9 +81,13 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
     }
 
     private fun setRecyclerView() {
+        val spanCount = 2
+        val spacing = 100
+        val includeEdge = true
+
         binding.rvCharacters.apply {
             adapter = characterAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         }
     }
 }

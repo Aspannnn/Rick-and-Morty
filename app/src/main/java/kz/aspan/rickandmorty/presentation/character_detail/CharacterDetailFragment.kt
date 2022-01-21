@@ -1,15 +1,17 @@
 package kz.aspan.rickandmorty.presentation.character_detail
 
-import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.common.navigateSafely
@@ -38,23 +40,16 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         val character: Character = args.character
         subscribeToObservers()
         setupRecyclerView()
-        binding.apply {
-            characterIv.load(character.image)
-            collapsingToolBar.title = character.name
-            isAliveView.backgroundTintList = getColor(character.status)
-            statusTv.text = character.status
-            speciesTv.text = character.species
-            typeTv.text = character.type
-            lastLocationTv.text = character.location.name
+        setupTitle(character.name)
+        setInformation(character)
 
-            lastLocationTv.setOnClickListener {
-                findNavController().navigateSafely(
-                    R.id.action_characterDetailFragment_to_locationDetailFragment,
-                    Bundle().apply {
-                        putString("locationUrl", character.location.url)
-                    }
-                )
-            }
+        binding.lastLocation.setOnClickListener {
+            findNavController().navigateSafely(
+                R.id.action_characterDetailFragment_to_locationDetailFragment,
+                Bundle().apply {
+                    putString("locationUrl", character.location.url)
+                }
+            )
         }
 
         episodeAdapter.setOnEpisodeClickListener { episode ->
@@ -88,33 +83,55 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
         })
     }
 
-
-    private fun getColor(
-        status: String,
-    ): ColorStateList {
-        return when (status) {
-            "Alive" -> {
-                requireActivity().getColorStateList(R.color.green_snake)
-            }
-            "Dead" -> {
-                requireActivity().getColorStateList(R.color.jasper)
-            }
-            else -> {
-                requireActivity().getColorStateList(R.color.gray)
-            }
-        }
-    }
-
     private fun setupRecyclerView() {
+
         binding.rvEpisode.apply {
             adapter = episodeAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(
-                DividerItemDecoration(
-                    activity,
-                    LinearLayoutManager.VERTICAL
-                )
-            )
+            val itemDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+            val drawable: Drawable =
+                ResourcesCompat.getDrawable(resources, R.drawable.devider, null)!!
+            itemDecoration.setDrawable(drawable)
+//            addItemDecoration(itemDecoration)
+        }
+    }
+
+    private fun setupTitle(characterName: String) {
+        var isShow = true
+        var scrollRange = -1
+
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+            if (scrollRange == -1) {
+                scrollRange = barLayout?.totalScrollRange!!
+            }
+            if (scrollRange + verticalOffset == 0) {
+                binding.collapsingToolBar.title = characterName
+                isShow = true
+            } else if (isShow) {
+                binding.collapsingToolBar.title = " "
+                isShow = false
+            }
+        })
+    }
+
+    private fun setInformation(character: Character) {
+        binding.apply {
+            characterIv.load(character.image)
+            characterNameTv.text = character.name
+            statusTv.text = character.status
+            speciesTv.text = character.species.uppercase()
+            lastLocationTv.text = character.location.name
+
+            genderLayout.subtitleTv.text = "Gender"
+            genderLayout.secondaryTextTV.text = character.gender
+
+            originLayout.subtitleTv.text = "Origin"
+            originLayout.secondaryTextTV.text = character.origin.name
+
+            typeLayout.subtitleTv.text = "Type"
+            val type =
+                if (character.type.isEmpty() && character.species == "Human") "Human" else character.type
+            typeLayout.secondaryTextTV.text = type
         }
     }
 }

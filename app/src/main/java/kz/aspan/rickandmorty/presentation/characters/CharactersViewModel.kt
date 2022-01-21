@@ -76,27 +76,27 @@ class CharactersViewModel @Inject constructor(
 
 
     fun getCharacters(page: Int = nextPage) {
-            whoMakesTheRequest.postValue(CHARACTERS)
-            viewModelScope.launch {
-                characterMutableLiveData.postValue(Response.Loading())
-                try {
-                    val result = repository.getAllCharacters(page)
+        whoMakesTheRequest.postValue(CHARACTERS)
+        viewModelScope.launch {
+            characterMutableLiveData.postValue(Response.Loading())
+            try {
+                val result = repository.getAllCharacters(page)
 
-                    oldCharacterList.addAll(result.listOfCharacter)
-                    characterMutableLiveData.postValue(Response.Success(oldCharacterList))
+                oldCharacterList.addAll(result.listOfCharacter)
+                characterMutableLiveData.postValue(Response.Success(oldCharacterList))
 
-                    val charactersInfo = result.info
-                    if (charactersInfo.next != null) {
-                        val uri = Uri.parse(charactersInfo.next)
-                        nextPage = uri.getQueryParameter("page")!!.toInt()
-                    } else {
-                        isCharacterLastPage = true
-                    }
-                } catch (e: Exception) {
-                    characterMutableLiveData.postValue(Response.Error(e))
-                    characterMutableLiveData.postValue(null)
+                val charactersInfo = result.info
+                if (charactersInfo.next != null) {
+                    val uri = Uri.parse(charactersInfo.next)
+                    nextPage = uri.getQueryParameter("page")!!.toInt()
+                } else {
+                    isCharacterLastPage = true
                 }
+            } catch (e: Exception) {
+                characterMutableLiveData.postValue(Response.Error(e))
+                characterMutableLiveData.postValue(null)
             }
+        }
     }
 
 }

@@ -25,7 +25,8 @@
         android:id="@+id/charactersRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:spanCount="2"
         tools:listitem="@layout/item_character" />
 </LinearLayout>

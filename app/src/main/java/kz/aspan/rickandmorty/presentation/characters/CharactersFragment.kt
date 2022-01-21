@@ -17,17 +17,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.adapters.CharacterListAdapter
+import kz.aspan.rickandmorty.common.*
 import kz.aspan.rickandmorty.common.Constants.CHARACTERS
 import kz.aspan.rickandmorty.common.Constants.FILTER_CHARACTER
-import kz.aspan.rickandmorty.common.navigateSafely
 import kz.aspan.rickandmorty.databinding.FragmentCharactersBinding
-import kz.aspan.rickandmorty.common.PaginationScrollListener
-import kz.aspan.rickandmorty.common.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment(R.layout.fragment_characters) {
-
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding: FragmentCharactersBinding
@@ -39,6 +36,10 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     lateinit var characterAdapter: CharacterListAdapter
 
     private var who = CHARACTERS
+
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,44 +112,52 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         isLoading = true
     }
 
-    var isLoading = false
-    var isLastPage = false
-    var isScrolling = false
+
+
     private fun setupRecyclerView() {
-        val gridLayoutManager = GridLayoutManager(requireActivity(), 2)
+        val spanCount = 2
+        val spacing = 75
+        val includeEdge = true
+
+        val gridLayoutManager =
+            GridLayoutManager(requireActivity(), spanCount, RecyclerView.VERTICAL, false)
         binding.charactersRv.apply {
             adapter = characterAdapter
             layoutManager = gridLayoutManager
-
-            addOnScrollListener(object : PaginationScrollListener(gridLayoutManager) {
-                override fun isLoading(): Boolean {
-                    return isLoading
-                }
-
-                override fun isLastPage(): Boolean {
-                    return isLastPage
-                }
-
-                override fun isScrolling(): Boolean {
-                    return isScrolling
-                }
-
-                override fun loadMoreItems() {
-                    if (who == CHARACTERS) {
-                        viewModel.getCharacters()
-                    } else {
-                        viewModel.filterCharacter()
-                    }
-                    isLoading = false
-                }
-
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                        isScrolling = true
-                    }
-                }
-            })
+            addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         }
+        pagination(gridLayoutManager)
+    }
+
+    private fun pagination(gridLayoutManager:GridLayoutManager) {
+        binding.charactersRv.addOnScrollListener(object : PaginationScrollListener(gridLayoutManager) {
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+
+            override fun isLastPage(): Boolean {
+                return isLastPage
+            }
+
+            override fun isScrolling(): Boolean {
+                return isScrolling
+            }
+
+            override fun loadMoreItems() {
+                if (who == CHARACTERS) {
+                    viewModel.getCharacters()
+                } else {
+                    viewModel.filterCharacter()
+                }
+                isLoading = false
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true
+                }
+            }
+        })
     }
 }

@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".presentation.location.LocationDetailFragment">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/locationNameTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Citadel of Ricks" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/athens_gray"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/typeTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Space station" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/typeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:text="Space station" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dimensionTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="unknown" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/locationNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            tools:text="Citadel of Ricks" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/dimensionTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            tools:text="unknown" />
+    </LinearLayout>
+
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/residentsTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="residents" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:text="residents"
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCharacters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
         tools:listitem="@layout/item_character" />
 </LinearLayout>

@@ -10,14 +10,15 @@
     <color name="magnolia">#F8F4FF</color>
     <color name="denim">#3B638C</color>
     <color name="dusk_blue">#255886</color>
+    <color name="rock_blue">#96A9C7</color>
     <color name="ghost_white">#F8F9FF</color>
     <color name="green_snake">#55CC44</color>
     <color name="jasper">#D63D2E</color>
     <color name="gray">#808080</color>
 
 
-
     <color name="charcoal_gray">#3C3E44</color>
     <color name="baltic_sea">#24282F</color>
     <color name="start_dust">#9E9E9E</color>
+    <color name="athens_gray">#F2F2F7</color>
 </resources>

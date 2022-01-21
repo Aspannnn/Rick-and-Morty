@@ -3,35 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_height="88dp"
+    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_baseline_live_tv_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/episodeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="Episode 1"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="?titleFontColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Episode 1" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/episodeTitleTv"
+        android:id="@+id/episodeNameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Something Ricked This Way Comes"
+        android:textColor="?subTitleFontColor"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/episodeTv"
-        app:layout_constraintTop_toBottomOf="@+id/episodeTv" />
+        app:layout_constraintTop_toBottomOf="@+id/episodeTv"
+        tools:text="Something Ricked This Way Comes" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/airDateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textColor="?subTitleFontColor"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@+id/episodeNameTv"
+        app:layout_constraintTop_toBottomOf="@+id/episodeNameTv"
+        tools:text="December 2, 2013" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

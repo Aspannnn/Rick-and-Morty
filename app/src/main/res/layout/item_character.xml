@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="222dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="?attr/colorOnPrimarySurface"

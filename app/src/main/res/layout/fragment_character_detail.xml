@@ -17,17 +17,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorOnPrimarySurface"
-            app:expandedTitleGravity="center_horizontal|bottom"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:title="@string/app_name">
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/characterIv"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/rick"
-                app:layout_collapseMode="parallax" />
+                android:layout_height="254dp"
+                android:background="@color/athens_gray">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/screaming_sun_planet"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/characterIv"
+                    android:layout_width="146dp"
+                    android:layout_height="146dp"
+                    android:padding="19dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/rick"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    app:strokeColor="@color/athens_gray"
+                    app:strokeWidth="6dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/statusTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/subTitleFontColor"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/characterIv" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/characterNameTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/titleFontColor"
+                    android:textSize="34sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/statusTv"
+                    tools:text="character name" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/speciesTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/subTitleFontColor"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/characterNameTv"
+                    tools:text="character name" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
@@ -48,76 +100,103 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Informations"
+                android:textColor="@color/rock_blue"
+                android:textSize="20sp" />
 
-                <View
-                    android:id="@+id/isAliveView"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/is_alive_circle"
-                    android:backgroundTint="@color/green_snake" />
+            <include
+                android:id="@+id/genderLayout"
+                layout="@layout/information_layout" />
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/devider" />-->
+
+            <include
+                android:id="@+id/originLayout"
+                layout="@layout/information_layout" />
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/devider" />-->
+
+            <include
+                android:id="@+id/typeLayout"
+                layout="@layout/information_layout" />
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/devider" />-->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lastLocation"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/statusTv"
+                    android:id="@+id/materialTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="@color/denim"
-                    android:textSize="15sp" />
-            </LinearLayout>
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Last know location"
+                    android:textColor="?attr/titleFontColor"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/lastLocationTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/subTitleFontColor"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/materialTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/materialTextView"
+                    tools:text="Earth" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_baseline_navigate_next_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/devider" />-->
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Species" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/speciesTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Human" />
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Type" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/typeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Parasite" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last know location" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/lastLocationTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Earth"
-                android:textSize="16sp" />
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Episode"
-                android:textSize="16sp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:text="Episodes"
+                android:textColor="@color/rock_blue"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEpisode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/firstSeenInTv"
                 tools:listitem="@layout/item_episode" />
         </LinearLayout>
