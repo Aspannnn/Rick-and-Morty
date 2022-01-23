@@ -122,13 +122,13 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
             speciesTv.text = character.species.uppercase()
             lastLocationTv.text = character.location.name
 
-            genderLayout.subtitleTv.text = "Gender"
+            genderLayout.subtitleTv.text = resources.getString(R.string.gender)
             genderLayout.secondaryTextTV.text = character.gender
 
-            originLayout.subtitleTv.text = "Origin"
+            originLayout.subtitleTv.text = resources.getString(R.string.origin)
             originLayout.secondaryTextTV.text = character.origin.name
 
-            typeLayout.subtitleTv.text = "Type"
+            typeLayout.subtitleTv.text = resources.getString(R.string.type)
             val type =
                 if (character.type.isEmpty() && character.species == "Human") "Human" else character.type
             typeLayout.secondaryTextTV.text = type

@@ -10,13 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:background="@color/athens_gray"
+        android:background="?attr/colorOnPrimarySurface"
         android:gravity="center"
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/typeTv"
             android:layout_width="wrap_content"
+            android:textColor="?attr/fontColor"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             tools:text="Space station" />
@@ -26,6 +27,7 @@
             android:id="@+id/locationNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="24sp"
             tools:text="Citadel of Ricks" />
 
@@ -34,6 +36,7 @@
             android:id="@+id/dimensionTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="13sp"
             tools:text="unknown" />
     </LinearLayout>
@@ -43,9 +46,10 @@
         android:id="@+id/residentsTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/informationFontColor"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
-        android:text="residents"
+        android:text="@string/residents"
         android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView

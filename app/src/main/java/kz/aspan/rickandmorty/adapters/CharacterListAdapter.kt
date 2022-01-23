@@ -31,7 +31,7 @@ class CharacterListAdapter @Inject constructor() :
             characterNameTv.text = character.name
             characterImageInCv.load(character.image)
             isAliveView.backgroundTintList = getColor(character.status, holder)
-            statusTv.text = "${character.status} - ${character.species}"
+            statusTv.text = character.status
             root.setOnClickListener {
                 onCharacterClickListener?.let { click ->
                     click(character)

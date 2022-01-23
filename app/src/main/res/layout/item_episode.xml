@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textColor="?titleFontColor"
+        android:textColor="?fontColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
         android:id="@+id/episodeNameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?subTitleFontColor"
+        android:textColor="?fontColor"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/episodeTv"
         app:layout_constraintTop_toBottomOf="@+id/episodeTv"
@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
-        android:textColor="?subTitleFontColor"
+        android:textColor="?fontColor"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@+id/episodeNameTv"
         app:layout_constraintTop_toBottomOf="@+id/episodeNameTv"
@@ -50,5 +50,6 @@
         android:src="@drawable/ic_baseline_navigate_next_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/navigation_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

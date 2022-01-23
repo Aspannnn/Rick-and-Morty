@@ -15,6 +15,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/charcoal_gray</item>
         <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
-        <item name="titleFontColor">@color/denim</item>
+        <item name="fontColor">@color/white</item>
+        <item name="informationFontColor">@color/start_dust</item>
     </style>
 </resources>

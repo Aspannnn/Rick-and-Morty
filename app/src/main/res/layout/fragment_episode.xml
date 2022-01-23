@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:background="@color/athens_gray"
+        android:background="?attr/colorOnPrimarySurface"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -18,6 +18,7 @@
             android:id="@+id/airDateTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="12sp"
             tools:text="December 2, 2013" />
 
@@ -26,6 +27,7 @@
             android:id="@+id/titleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="24sp"
             tools:text="Pilot" />
 
@@ -33,6 +35,7 @@
             android:id="@+id/episodeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="13sp"
             tools:text="season 01 episode 01" />
     </LinearLayout>
@@ -43,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
-        android:text="Characters"
+        android:text="@string/characters"
+        android:textColor="?attr/informationFontColor"
         android:textSize="20sp" />
 
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:textColor="?attr/titleFontColor"
+        android:textColor="?attr/fontColor"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Gender" />
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:textColor="?attr/subTitleFontColor"
+        android:textColor="?attr/fontColor"
         android:textSize="14sp"
         tools:text="Earth" />
 </LinearLayout>

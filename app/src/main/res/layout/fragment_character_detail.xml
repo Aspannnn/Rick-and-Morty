@@ -22,11 +22,12 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="254dp"
-                android:background="@color/athens_gray">
+                android:background="?attr/colorOnPrimarySurface">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="84dp"
+                    android:contentDescription="@string/profile_background_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/screaming_sun_planet"
                     app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +51,7 @@
                     android:id="@+id/statusTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/subTitleFontColor"
+                    android:textColor="?attr/fontColor"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +61,7 @@
                     android:id="@+id/characterNameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/titleFontColor"
+                    android:textColor="?attr/fontColor"
                     android:textSize="34sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +72,7 @@
                     android:id="@+id/speciesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/subTitleFontColor"
+                    android:textColor="?attr/fontColor"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,36 +107,21 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Informations"
-                android:textColor="@color/rock_blue"
+                android:text="@string/information"
+                android:textColor="?attr/informationFontColor"
                 android:textSize="20sp" />
 
             <include
                 android:id="@+id/genderLayout"
                 layout="@layout/information_layout" />
 
-            <!--            <View-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/devider" />-->
-
             <include
                 android:id="@+id/originLayout"
                 layout="@layout/information_layout" />
 
-            <!--            <View-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/devider" />-->
-
             <include
                 android:id="@+id/typeLayout"
                 layout="@layout/information_layout" />
-
-            <!--            <View-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/devider" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/lastLocation"
@@ -151,8 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:text="Last know location"
-                    android:textColor="?attr/titleFontColor"
+                    android:text="@string/last_know_location"
+                    android:textColor="?attr/fontColor"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +148,7 @@
                     android:id="@+id/lastLocationTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/subTitleFontColor"
+                    android:textColor="?attr/fontColor"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/materialTextView"
                     app:layout_constraintTop_toBottomOf="@+id/materialTextView"
@@ -172,24 +158,20 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/navigation_icon"
                     android:src="@drawable/ic_baseline_navigate_next_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--            <View-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/devider" />-->
-
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="30dp"
-                android:text="Episodes"
-                android:textColor="@color/rock_blue"
+                android:text="@string/episodes"
+                android:textColor="?attr/informationFontColor"
                 android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView

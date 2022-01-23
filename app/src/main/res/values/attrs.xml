@@ -2,4 +2,7 @@
 <resources>
     <attr name="titleFontColor" format="reference|color" />
     <attr name="subTitleFontColor" format="reference|color" />
+    <attr name="fontColor" format="reference|color" />
+    <attr name="informationFontColor" format="reference|color" />
+
 </resources>
