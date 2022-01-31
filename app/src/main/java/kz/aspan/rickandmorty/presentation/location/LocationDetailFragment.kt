@@ -43,7 +43,7 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
 
 
     private fun subscribeToObservers() {
-        viewModel.locationMutableLiveData.observe(viewLifecycleOwner, { response ->
+        viewModel.locationMutableLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {}
                 is Response.Success -> {
@@ -57,10 +57,11 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
                 is Response.Error -> {
                     TODO("Agai dan surau kerek")
                 }
+                else -> {}
             }
-        })
+        }
 
-        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {}
                 is Response.Success -> {
@@ -71,8 +72,9 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
                 is Response.Error -> {
                     TODO("Agai dan surau kerek")
                 }
+                else -> {}
             }
-        })
+        }
     }
 
     override fun onDestroy() {

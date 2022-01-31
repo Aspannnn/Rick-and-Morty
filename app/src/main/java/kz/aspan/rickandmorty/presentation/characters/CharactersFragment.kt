@@ -75,7 +75,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
     private fun subscribeToObservers() {
-        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {
                     showProgressBar()
@@ -96,12 +96,13 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                     hideProgressBar()
                     TODO("Agai dan surau kerek")
                 }
+                else -> {}
             }
-        })
+        }
 
-        viewModel.whoMakesTheRequest.observe(viewLifecycleOwner, {
+        viewModel.whoMakesTheRequest.observe(viewLifecycleOwner) {
             who = it
-        })
+        }
     }
 
     private fun hideProgressBar() {

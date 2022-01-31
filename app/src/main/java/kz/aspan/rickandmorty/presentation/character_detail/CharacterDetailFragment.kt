@@ -68,7 +68,7 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
 
 
     private fun subscribeToObservers() {
-        viewModel.episodeMutableLiveData.observe(viewLifecycleOwner, { response ->
+        viewModel.episodeMutableLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {}
                 is Response.Success -> {
@@ -79,8 +79,9 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
                 is Response.Error -> {
                     TODO("Agai dan surau kerek")
                 }
+                else -> {}
             }
-        })
+        }
     }
 
     private fun setupRecyclerView() {

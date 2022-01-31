@@ -53,7 +53,7 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     }
 
     private fun subscribeToObservers() {
-        viewModel.characterMutableLiveData.observe(viewLifecycleOwner, { response ->
+        viewModel.characterMutableLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Response.Loading -> {}
                 is Response.Success -> {
@@ -64,8 +64,9 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
                 is Response.Error -> {
                     TODO("Agai dan surau kerek")
                 }
+                else -> {}
             }
-        })
+        }
     }
 
 
