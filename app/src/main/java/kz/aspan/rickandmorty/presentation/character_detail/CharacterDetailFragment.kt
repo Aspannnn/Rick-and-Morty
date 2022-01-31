@@ -107,9 +107,11 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
             }
             if (scrollRange + verticalOffset == 0) {
                 binding.collapsingToolBar.title = characterName
+                binding.collapsingToolBar.visibility = View.GONE
                 isShow = true
             } else if (isShow) {
                 binding.collapsingToolBar.title = " "
+                binding.collapsingToolBar.visibility = View.VISIBLE
                 isShow = false
             }
         })
