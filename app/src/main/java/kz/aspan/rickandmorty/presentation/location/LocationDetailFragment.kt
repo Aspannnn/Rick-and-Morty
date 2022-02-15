@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kz.aspan.rickandmorty.R
 import kz.aspan.rickandmorty.adapters.CharacterListAdapter
@@ -30,6 +32,7 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLocationDetailBinding.bind(view)
+        setupToolBar()
         subscribeToObservers()
         setRecyclerView()
 
@@ -80,6 +83,11 @@ class LocationDetailFragment : Fragment(R.layout.fragment_location_detail) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun setupToolBar() {
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.toolBar.setupWithNavController(findNavController(), appBarConfiguration)
     }
 
     private fun setRecyclerView() {

@@ -1,6 +1,7 @@
 package kz.aspan.rickandmorty.presentation.characters
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.AbsListView
 import androidx.core.widget.addTextChangedListener
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +47,7 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCharactersBinding.bind(view)
+        setupToolBar()
         setupRecyclerView()
         subscribeToObservers()
 
@@ -56,6 +60,11 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
             )
         }
 
+        binding.bottomSheet.setOnClickListener {
+            findNavController().navigateSafely(R.id.action_charactersFragment_to_bottomSheetFragment)
+        }
+
+
         var searchJob: Job? = null
         binding.searchEt.addTextChangedListener {
             searchJob?.cancel()
@@ -66,6 +75,11 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
                 isLastPage = viewModel.isFilterLastPage
             }
         }
+    }
+
+    private fun setupToolBar() {
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.toolBar.setupWithNavController(findNavController(), appBarConfiguration)
     }
 
 
@@ -114,7 +128,6 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
     }
 
 
-
     private fun setupRecyclerView() {
         val spanCount = 2
         val spacing = 75
@@ -130,8 +143,9 @@ class CharactersFragment : Fragment(R.layout.fragment_characters) {
         pagination(gridLayoutManager)
     }
 
-    private fun pagination(gridLayoutManager:GridLayoutManager) {
-        binding.charactersRv.addOnScrollListener(object : PaginationScrollListener(gridLayoutManager) {
+    private fun pagination(gridLayoutManager: GridLayoutManager) {
+        binding.charactersRv.addOnScrollListener(object :
+            PaginationScrollListener(gridLayoutManager) {
             override fun isLoading(): Boolean {
                 return isLoading
             }

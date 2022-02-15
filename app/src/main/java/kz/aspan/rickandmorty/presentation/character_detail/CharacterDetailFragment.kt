@@ -1,13 +1,21 @@
 package kz.aspan.rickandmorty.presentation.character_detail
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -36,8 +44,12 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         _binding = FragmentCharacterDetailBinding.bind(view)
+
         val character: Character = args.character
+
+        setupToolbar()
         subscribeToObservers()
         setupRecyclerView()
         setupTitle(character.name)
@@ -64,6 +76,15 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun setupToolbar() {
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.collapsingToolBar.setupWithNavController(
+            binding.toolBar,
+            findNavController(),
+            appBarConfiguration
+        )
     }
 
 
@@ -107,11 +128,9 @@ class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
             }
             if (scrollRange + verticalOffset == 0) {
                 binding.collapsingToolBar.title = characterName
-                binding.collapsingToolBar.visibility = View.GONE
                 isShow = true
             } else if (isShow) {
                 binding.collapsingToolBar.title = " "
-                binding.collapsingToolBar.visibility = View.VISIBLE
                 isShow = false
             }
         })

@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/characterDetailFragment"
         android:name="kz.aspan.rickandmorty.presentation.character_detail.CharacterDetailFragment"
-        android:label="fragment_character_detail"
         tools:layout="@layout/fragment_character_detail">
         <argument
             android:name="character"
@@ -23,16 +22,18 @@
     <fragment
         android:id="@+id/charactersFragment"
         android:name="kz.aspan.rickandmorty.presentation.characters.CharactersFragment"
-        android:label="fragment_characters"
+        android:label="Characters"
         tools:layout="@layout/fragment_characters">
         <action
             android:id="@+id/action_charactersFragment_to_characterDetailFragment"
             app:destination="@id/characterDetailFragment" />
+        <action
+            android:id="@+id/action_charactersFragment_to_bottomSheetFragment"
+            app:destination="@id/bottomSheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/episodeFragment"
         android:name="kz.aspan.rickandmorty.presentation.episode.EpisodeFragment"
-        android:label="fragment_episode"
         tools:layout="@layout/fragment_episode">
         <action
             android:id="@+id/action_episodeFragment_to_characterDetailFragment"
@@ -44,7 +45,6 @@
     <fragment
         android:id="@+id/locationDetailFragment"
         android:name="kz.aspan.rickandmorty.presentation.location.LocationDetailFragment"
-        android:label="fragment_location_detail"
         tools:layout="@layout/fragment_location_detail" >
         <action
             android:id="@+id/action_locationDetailFragment_to_characterDetailFragment"
@@ -53,4 +53,13 @@
             android:name="locationUrl"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetFragment"
+        android:name="kz.aspan.rickandmorty.presentation.characters.BottomSheetFragment"
+        android:label="fragment_bottom_sheet"
+        tools:layout="@layout/fragment_bottom_sheet" >
+        <action
+            android:id="@+id/action_bottomSheetFragment_to_charactersFragment"
+            app:destination="@id/charactersFragment" />
+    </dialog>
 </navigation>

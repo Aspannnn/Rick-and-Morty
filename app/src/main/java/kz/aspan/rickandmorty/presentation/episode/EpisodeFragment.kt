@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +36,7 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEpisodeBinding.bind(view)
+        setupToolBar()
         subscribeToObservers()
         setRecyclerView()
 
@@ -73,6 +76,11 @@ class EpisodeFragment : Fragment(R.layout.fragment_episode) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun setupToolBar() {
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.toolBar.setupWithNavController(findNavController(), appBarConfiguration)
     }
 
     private fun setRecyclerView() {

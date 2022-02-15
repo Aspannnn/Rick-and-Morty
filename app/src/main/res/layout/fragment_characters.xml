@@ -7,7 +7,14 @@
     android:orientation="vertical"
     tools:context=".presentation.characters.CharactersFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorOnPrimarySurface" />
+
     <com.google.android.material.textfield.TextInputEditText
+        android:visibility="gone"
         android:id="@+id/searchEt"
         android:layout_width="match_parent"
         android:layout_height="46dp"
@@ -15,11 +22,20 @@
         android:background="@drawable/search_shape"
         android:drawableStart="@drawable/ic_baseline_search_24"
         android:drawablePadding="8dp"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         android:maxLines="1"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="@color/denim"
         android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/bottomSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="testButton"
+        android:textColor="@color/jasper" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/charactersRv"
@@ -27,6 +43,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:scrollbars="vertical"
+        android:visibility="gone"
         app:spanCount="2"
         tools:listitem="@layout/item_character" />
 </LinearLayout>

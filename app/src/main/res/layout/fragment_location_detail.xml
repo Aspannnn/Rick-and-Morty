@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context=".presentation.location.LocationDetailFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorOnPrimarySurface" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="96dp"
@@ -17,8 +23,8 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/typeTv"
             android:layout_width="wrap_content"
-            android:textColor="?attr/fontColor"
             android:layout_height="wrap_content"
+            android:textColor="?attr/fontColor"
             android:textSize="12sp"
             tools:text="Space station" />
 
@@ -46,10 +52,10 @@
         android:id="@+id/residentsTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/informationFontColor"
         android:layout_marginStart="32dp"
         android:layout_marginTop="10dp"
         android:text="@string/residents"
+        android:textColor="?attr/informationFontColor"
         android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
